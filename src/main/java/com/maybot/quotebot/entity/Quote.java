@@ -1,5 +1,8 @@
 package com.maybot.quotebot.entity;
 
+import com.maybot.quotebot.constant.DataContants;
+import com.maybot.quotebot.model.QuoteModel;
+
 import javax.persistence.*;
 
 import java.util.ArrayList;
@@ -16,17 +19,32 @@ public class Quote {
     @Column(name = "id", nullable = false)
     protected Long id;
 
-    @Column(name = "text", length = 280, nullable = false)
+    @Column(name = "text", length = DataContants.QUOTE_TEXT_MAX, nullable = false)
     private String text;
 
-    @Column(name = "source", length = 280)
+    @Column(name = "source", length = DataContants.QUOTE_SOURCE_MAX)
     private String source;
 
-    @Column(name = "replies")
-    private List<Quote> replies;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "reply_id")
+    private Quote reply;
 
-    public Quote() {
-        //this.replies = new ArrayList<>();
+    public Quote() {}
+
+    public Quote(QuoteModel model) {
+        this.text = model.getText();
+        this.source = model.getSource();
+        QuoteModel reply = model.getReply();
+        if(reply != null)
+            this.reply = new Quote(reply);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getText() {
@@ -45,11 +63,11 @@ public class Quote {
         this.source = source;
     }
 
-    public List<Quote> getReplies() {
-        return replies;
+    public Quote getReply() {
+        return reply;
     }
 
-    public void setReplies(List<Quote> replies) {
-        this.replies = replies;
+    public void setReply(Quote reply) {
+        this.reply = reply;
     }
 }
