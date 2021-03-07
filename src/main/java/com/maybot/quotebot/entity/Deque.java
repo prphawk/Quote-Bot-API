@@ -1,15 +1,16 @@
 package com.maybot.quotebot.entity;
 
-import javax.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
-import static javax.persistence.GenerationType.AUTO;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "deque")
-public class Deque {
+public class Deque implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     protected Long id;
 
@@ -17,18 +18,19 @@ public class Deque {
     @JoinColumn(name = "quote_id", nullable = false)
     private Quote quote;
 
-    @Column(name = "token", nullable = false)
-    private int token;
+    @Column(name = "priority", nullable = false)
+    private boolean priority;
 
     public Deque() {}
 
     public Deque(Quote quote) {
         this.quote = quote;
+        this.priority = false;
     }
 
-    public Deque(Quote quote, int token) {
+    public Deque(Quote quote, boolean priority) {
         this.quote = quote;
-        this.token = token;
+        this.priority = priority;
     }
 
     public Long getId() {
@@ -47,11 +49,11 @@ public class Deque {
         this.quote = quote;
     }
 
-    public int getToken() {
-        return token;
+    public boolean isPriority() {
+        return priority;
     }
 
-    public void setToken(int token) {
-        this.token = token;
+    public void setPriority(boolean priority) {
+        this.priority = priority;
     }
 }

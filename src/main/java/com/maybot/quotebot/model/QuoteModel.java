@@ -18,7 +18,7 @@ public class QuoteModel {
 
     private List<ReplyModel> replies;
 
-    private boolean pushFirst;
+    private boolean priority;
 
     public String getText() {
         return text;
@@ -44,11 +44,11 @@ public class QuoteModel {
         this.replies = replies;
     }
 
-    public boolean isPushFirst() {
-        return pushFirst;
+    public boolean isPriority() {
+        return priority;
     }
 
-    public void setPushFirst(boolean pushFirst) {
-        this.pushFirst = pushFirst;
+    public void setPriority(boolean priority) {
+        this.priority = priority;
     }
 }

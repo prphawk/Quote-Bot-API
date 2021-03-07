@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,34 +40,27 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public QuoteResponseModel save(QuoteModel model, int[] tokens) {
+    public QuoteResponseModel save(QuoteModel model) {
 
         Quote quote = new Quote(model);
         quoteRepository.save(quote);
         QuoteResponseModel response = new QuoteResponseModel(quote);
         response.setReplies(saveReplies(model, quote));
-        pushToDeque(model.isPushFirst(), quote, tokens);
+        dequeRepository.save(new Deque(quote, model.isPriority()));
 
         return response;
     }
 
     public ResponseEntity<QuoteResponseModel> saveRequest(QuoteModel model) {
 
-        final int[] tokens = {0, 0};
-        getFirstAndLastTokens(tokens);
-
-        QuoteResponseModel response = save(model, tokens);
+        QuoteResponseModel response = save(model);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public ResponseEntity<List<QuoteResponseModel>> saveAllRequest(List<QuoteModel> models) {
 
-        final int[] tokens = {0, 0};
-        getFirstAndLastTokens(tokens);
-
-        List<QuoteResponseModel> response = models.stream().map(model ->
-                save(model, tokens)).collect(Collectors.toList());
+        List<QuoteResponseModel> response = models.stream().map(this::save).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -84,18 +76,5 @@ public class QuoteServiceImpl {
         }
 
         return null;
-    }
-
-    public void getFirstAndLastTokens(int[] tokens) {
-        Optional<Deque> dequeSearch = dequeRepository.findFirstByOrderByTokenAsc();
-        if(dequeSearch.isPresent()) {
-            tokens[0] = dequeSearch.get().getToken();
-            dequeSearch = dequeRepository.findFirstByOrderByTokenDesc();
-            dequeSearch.ifPresent(deque -> tokens[1] = deque.getToken());
-        }
-    }
-
-    void pushToDeque(boolean pushFirst, Quote quote, int[] tokens) {
-        dequeRepository.save(new Deque(quote, pushFirst ? --tokens[0] : ++tokens[1]));
     }
 }

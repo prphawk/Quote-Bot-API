@@ -6,14 +6,14 @@ public class DequeResponseModel {
 
     protected Long id;
 
-    private int token;
+    private boolean priority;
 
     private QuoteResponseModel quote;
 
     public DequeResponseModel(Deque deque) {
         this.id = deque.getId();
         this.quote = new QuoteResponseModel(deque.getQuote());
-        this.token = deque.getToken();
+        this.priority = deque.isPriority();
     }
 
     public Long getId() {
@@ -32,11 +32,11 @@ public class DequeResponseModel {
         this.quote = quote;
     }
 
-    public int getToken() {
-        return token;
+    public boolean isPriority() {
+        return priority;
     }
 
-    public void setToken(int token) {
-        this.token = token;
+    public void setPriority(boolean priority) {
+        this.priority = priority;
     }
 }
