@@ -27,7 +27,7 @@ public class DequeServiceImpl {
     }
 
     public ResponseEntity<List<DequeResponseModel>> getDeque() {
-        List<Deque> deque = (List<Deque>) dequeRepository.findAll();
+        List<Deque> deque = dequeRepository.findAllByOrderByTokenAsc();
         List<DequeResponseModel> response = deque.stream().map(DequeResponseModel::new).collect(Collectors.toList());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
