@@ -6,7 +6,7 @@ public class DequeResponseModel {
 
     protected Long id;
 
-    private Long token;
+    private int token;
 
     private QuoteResponseModel quote;
 
@@ -32,11 +32,11 @@ public class DequeResponseModel {
         this.quote = quote;
     }
 
-    public Long getToken() {
+    public int getToken() {
         return token;
     }
 
-    public void setToken(Long token) {
+    public void setToken(int token) {
         this.token = token;
     }
 }

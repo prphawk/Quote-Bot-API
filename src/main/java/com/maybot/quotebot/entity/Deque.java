@@ -3,7 +3,6 @@ package com.maybot.quotebot.entity;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "deque")
@@ -19,7 +18,7 @@ public class Deque {
     private Quote quote;
 
     @Column(name = "token", nullable = false)
-    private Long token;
+    private int token;
 
     public Deque() {}
 
@@ -27,7 +26,7 @@ public class Deque {
         this.quote = quote;
     }
 
-    public Deque(Quote quote, Long token) {
+    public Deque(Quote quote, int token) {
         this.quote = quote;
         this.token = token;
     }
@@ -48,11 +47,11 @@ public class Deque {
         this.quote = quote;
     }
 
-    public Long getToken() {
+    public int getToken() {
         return token;
     }
 
-    public void setToken(Long token) {
+    public void setToken(int token) {
         this.token = token;
     }
 }

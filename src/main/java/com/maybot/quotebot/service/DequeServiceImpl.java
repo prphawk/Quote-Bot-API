@@ -1,12 +1,14 @@
 package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Deque;
+import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.repository.*;
 import com.maybot.quotebot.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -40,9 +42,16 @@ public class DequeServiceImpl {
             QuoteResponseModel response = new QuoteResponseModel(deque.getQuote());
             dequeRepository.delete(deque);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+        } else {
 
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public void makeNewDeque() {
+        List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
+        Collections.shuffle(quotes);
+        //quotes.forEach(quote, index -> );
     }
 
 }

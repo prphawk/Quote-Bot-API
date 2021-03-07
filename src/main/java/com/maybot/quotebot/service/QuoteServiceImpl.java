@@ -41,24 +41,37 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<List<QuoteResponseModel>> saveAllRequest(List<QuoteModel> models) {
+    public QuoteResponseModel save(QuoteModel model, int[] tokens) {
 
-        final long[] tokens = {0L, 0L};
+        Quote quote = new Quote(model);
+        quoteRepository.save(quote);
+        QuoteResponseModel response = new QuoteResponseModel(quote);
+        response.setReplies(saveReplies(model, quote));
+        pushToDeque(model.isPushFirst(), quote, tokens);
+
+        return response;
+    }
+
+    public ResponseEntity<QuoteResponseModel> saveRequest(QuoteModel model) {
+
+        final int[] tokens = {0, 0};
         getFirstAndLastTokens(tokens);
 
-        List<QuoteResponseModel> response = models.stream().map(model -> {
-            Quote quote = new Quote(model);
-            quoteRepository.save(quote);
-            QuoteResponseModel quoteResponseModel = new QuoteResponseModel(quote);
-            quoteResponseModel.setReplies(saveReplies(model, quote));
-            saveToken(model, quote, tokens);
-            return quoteResponseModel;
-        }).collect(Collectors.toList());
+        QuoteResponseModel response = save(model, tokens);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    public ResponseEntity<List<QuoteResponseModel>> saveAllRequest(List<QuoteModel> models) {
 
+        final int[] tokens = {0, 0};
+        getFirstAndLastTokens(tokens);
+
+        List<QuoteResponseModel> response = models.stream().map(model ->
+                save(model, tokens)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     public List<ReplyResponseModel> saveReplies(QuoteModel model, Quote quote) {
         List<ReplyModel> replyModels = model.getReplies();
@@ -73,14 +86,16 @@ public class QuoteServiceImpl {
         return null;
     }
 
-    public void getFirstAndLastTokens(long[] tokens) {
+    public void getFirstAndLastTokens(int[] tokens) {
         Optional<Deque> dequeSearch = dequeRepository.findFirstByOrderByTokenAsc();
-        dequeSearch.ifPresent(deque -> tokens[0] = deque.getToken());
-        dequeSearch = dequeRepository.findFirstByOrderByTokenDesc();
-        dequeSearch.ifPresent(deque -> tokens[1] = deque.getToken());
+        if(dequeSearch.isPresent()) {
+            tokens[0] = dequeSearch.get().getToken();
+            dequeSearch = dequeRepository.findFirstByOrderByTokenDesc();
+            dequeSearch.ifPresent(deque -> tokens[1] = deque.getToken());
+        }
     }
 
-    void saveToken(QuoteModel model, Quote quote, long[] tokens) {
-        dequeRepository.save(new Deque(quote, model.isPushFirst() ? --tokens[0] : ++tokens[1]));
+    void pushToDeque(boolean pushFirst, Quote quote, int[] tokens) {
+        dequeRepository.save(new Deque(quote, pushFirst ? --tokens[0] : ++tokens[1]));
     }
 }

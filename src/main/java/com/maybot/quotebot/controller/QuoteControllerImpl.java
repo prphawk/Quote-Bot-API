@@ -26,9 +26,15 @@ public class QuoteControllerImpl {
         return quoteServiceImpl.getAllRequest();
     }
 
+    @PostMapping
+    public ResponseEntity<QuoteResponseModel> save(@Valid @RequestBody QuoteModel model) {
+        return quoteServiceImpl.saveRequest(model);
+    }
 
     @PostMapping("all/")
     public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody List<QuoteModel> models) {
         return quoteServiceImpl.saveAllRequest(models);
     }
+
+
 }
