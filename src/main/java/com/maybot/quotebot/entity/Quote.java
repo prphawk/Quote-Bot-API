@@ -5,7 +5,6 @@ import com.maybot.quotebot.model.QuoteModel;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -25,18 +24,14 @@ public class Quote {
     @Column(name = "source", length = DataContants.QUOTE_SOURCE_MAX)
     private String source;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "reply_id")
-    private Quote reply;
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reply> replies;
 
     public Quote() {}
 
     public Quote(QuoteModel model) {
         this.text = model.getText();
         this.source = model.getSource();
-        QuoteModel reply = model.getReply();
-        if(reply != null)
-            this.reply = new Quote(reply);
     }
 
     public Long getId() {
@@ -63,11 +58,11 @@ public class Quote {
         this.source = source;
     }
 
-    public Quote getReply() {
-        return reply;
+    public List<Reply> getReplies() {
+        return replies;
     }
 
-    public void setReply(Quote reply) {
-        this.reply = reply;
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
     }
 }

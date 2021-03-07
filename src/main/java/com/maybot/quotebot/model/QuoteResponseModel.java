@@ -2,6 +2,9 @@ package com.maybot.quotebot.model;
 
 import com.maybot.quotebot.entity.Quote;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class QuoteResponseModel {
 
     private Long id;
@@ -10,15 +13,14 @@ public class QuoteResponseModel {
 
     private String source;
 
-    private Long replyId;
+    private List<ReplyResponseModel> replies;
 
     public QuoteResponseModel(Quote quote) {
         this.id = quote.getId();
         this.text = quote.getText();
         this.source = quote.getSource();
-        Quote reply = quote.getReply();
-        if(reply != null)
-            this.replyId = reply.getId();
+        if(quote.getReplies() != null)
+            this.replies = quote.getReplies().stream().map(ReplyResponseModel::new).collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -45,11 +47,11 @@ public class QuoteResponseModel {
         this.source = source;
     }
 
-    public Long getReplyId() {
-        return replyId;
+    public List<ReplyResponseModel> getReplies() {
+        return replies;
     }
 
-    public void setReplyId(Long replyId) {
-        this.replyId = replyId;
+    public void setReplies(List<ReplyResponseModel> replies) {
+        this.replies = replies;
     }
 }

@@ -4,6 +4,7 @@ import com.maybot.quotebot.constant.DataContants;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class QuoteModel {
 
@@ -15,7 +16,7 @@ public class QuoteModel {
     @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
     private String source;
 
-    private QuoteModel reply;
+    private List<ReplyModel> replies;
 
     private boolean pushFirst;
 
@@ -35,11 +36,19 @@ public class QuoteModel {
         this.source = source;
     }
 
-    public QuoteModel getReply() {
-        return reply;
+    public List<ReplyModel> getReplies() {
+        return replies;
     }
 
-    public void setReply(QuoteModel reply) {
-        this.reply = reply;
+    public void setReplies(List<ReplyModel> replies) {
+        this.replies = replies;
+    }
+
+    public boolean isPushFirst() {
+        return pushFirst;
+    }
+
+    public void setPushFirst(boolean pushFirst) {
+        this.pushFirst = pushFirst;
     }
 }

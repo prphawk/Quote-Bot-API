@@ -22,14 +22,10 @@ public class QuoteControllerImpl {
     }
 
     @GetMapping("all/")
-    public  ResponseEntity<List<QuoteResponseModel>> getAll() {
+    public ResponseEntity<List<QuoteResponseModel>> getAll() {
         return quoteServiceImpl.getAllRequest();
     }
 
-    @PostMapping
-    public ResponseEntity<QuoteResponseModel> save(@Valid @RequestBody QuoteModel model) {
-        return quoteServiceImpl.saveRequest(model);
-    }
 
     @PostMapping("all/")
     public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody List<QuoteModel> models) {
