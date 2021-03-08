@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public class QuoteResponseModel {
 
+    //botar os valid aqui
     private Long id;
 
     private String text;
@@ -14,6 +15,8 @@ public class QuoteResponseModel {
     private String source;
 
     private List<ReplyResponseModel> replies;
+
+    public QuoteResponseModel() {}
 
     public QuoteResponseModel(Quote quote) {
         this.id = quote.getId();

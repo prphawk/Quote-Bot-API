@@ -2,6 +2,7 @@ package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.ReplyModel;
+import com.maybot.quotebot.model.ReplyResponseModel;
 
 import javax.persistence.*;
 
@@ -25,6 +26,11 @@ public class Reply {
     public Reply() {}
 
     public Reply(ReplyModel model, Quote quote) {
+        this.text = model.getText();
+        this.quote = quote;
+    }
+
+    public Reply(ReplyResponseModel model, Quote quote) {
         this.text = model.getText();
         this.quote = quote;
     }

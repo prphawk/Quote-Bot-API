@@ -1,5 +1,6 @@
 package com.maybot.quotebot.controller;
 
+import com.maybot.quotebot.model.AllQuoteModel;
 import com.maybot.quotebot.model.QuoteModel;
 import com.maybot.quotebot.model.QuoteResponseModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
@@ -32,8 +33,23 @@ public class QuoteControllerImpl {
     }
 
     @PostMapping("all/")
-    public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody List<QuoteModel> models) {
-        return quoteServiceImpl.saveAllRequest(models);
+    public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
+        return quoteServiceImpl.saveAllRequest(model);
+    }
+
+    @PutMapping
+    public ResponseEntity<QuoteResponseModel> edit(@Valid @RequestBody QuoteResponseModel model) {
+        return quoteServiceImpl.editRequest(model);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@Valid @RequestBody Long id) {
+        return quoteServiceImpl.deleteRequest(id);
+    }
+
+    @DeleteMapping("all/")
+    public ResponseEntity<Void> deleteAll(@Valid @RequestBody List<Long> ids) {
+        return quoteServiceImpl.deleteAllRequest(ids);
     }
 
 

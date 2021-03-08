@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class ReplyModel {
 
-    @NotNull(message = DataContants.QUOTE_TEXT_NULL_MESSAGE)
+    @NotNull(message = DataContants.REPLY_TEXT_NULL_MESSAGE)
     @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
     private String text;
 
