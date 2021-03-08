@@ -21,12 +21,12 @@ public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final DequeRepository dequeRepository;
-    private final ReplyRepository replyRepository;
+    private final ReplyServiceImpl replyServiceImpl;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository, ReplyRepository replyRepository) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository, ReplyServiceImpl replyServiceImpl) {
         this.quoteRepository = quoteRepository;
         this.dequeRepository = dequeRepository;
-        this.replyRepository = replyRepository;
+        this.replyServiceImpl = replyServiceImpl;
     }
 
     public ResponseEntity<List<QuoteResponseModel>> getAllRequest() {
@@ -39,11 +39,10 @@ public class QuoteServiceImpl {
     }
 
     public QuoteResponseModel save(QuoteModel model) {
-
         Quote quote = new Quote(model);
         quoteRepository.save(quote);
         QuoteResponseModel response = new QuoteResponseModel(quote);
-        response.setReplies(saveReplies(model, quote));
+        response.setReplies(replyServiceImpl.saveReplies(model, quote));
         dequeRepository.save(new Deque(quote, model.isPriority()));
 
         return response;
@@ -67,37 +66,32 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public List<ReplyResponseModel> saveReplies(QuoteModel model, Quote quote) {
-        List<ReplyModel> replyModels = model.getReplies();
-        if (replyModels != null) {
-            return replyModels.stream().map(replyModel -> {
-                Reply reply = new Reply(replyModel, quote);
-                return new ReplyResponseModel(replyRepository.save(reply));
-            }).collect(Collectors.toList());
-        }
 
-        return null;
-    }
 
     public ResponseEntity<QuoteResponseModel> editRequest(QuoteResponseModel model) {
+
         Optional<Quote> quoteSearch = quoteRepository.findById(model.getId());
+
         if(quoteSearch.isPresent()) {
             Quote quote = quoteSearch.get();
-            quote.setText(model.getText());
-            quote.setSource(model.getSource());
 
-            /*
-            List<Reply> replies = model.getReplies().stream().map(r -> new Reply(r, quote)).collect(Collectors.toList());
-            replyRepository.save()
-            //quote.setReplies(replies);
-            */
+            QuoteResponseModel response = new QuoteResponseModel(saveChanges(model, quote));
 
-            QuoteResponseModel response = new QuoteResponseModel(quoteRepository.save(quote));
+            List<ReplyResponseModel> replies = replyServiceImpl.editReplies(model.getReplies(), quote);
+
+            response.setReplies(replies);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    private Quote saveChanges(QuoteResponseModel model, Quote quote) {
+        quote.setText(model.getText());
+        quote.setSource(model.getSource());
+        return quoteRepository.save(quote);
+    }
+
 
     public ResponseEntity<Void> deleteRequest(Long id) {
         Optional<Quote> quoteSearch = quoteRepository.findById(id);
