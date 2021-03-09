@@ -6,7 +6,8 @@ import java.util.List;
 
 public class AllQuoteModel {
 
-    private boolean shuffle;
+    @NotNull
+    private Boolean shuffle;
 
     @NotNull
     @Valid

@@ -27,42 +27,54 @@ public class DequeServiceImpl {
     }
 
     public ResponseEntity<List<DequeResponseModel>> getDeque() {
+
         List<Deque> deque = dequeRepository.findAllPriorityFirst();
+
         List<DequeResponseModel> response = deque.stream().map(DequeResponseModel::new).collect(Collectors.toList());
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public ResponseEntity<QuoteResponseModel> popDequeRequest() {
+
         Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0,1));
 
         if(dequeSearch.isPresent()) {
             Deque deque = dequeSearch.get();
+
             QuoteResponseModel response = new QuoteResponseModel(deque.getQuote());
+
             dequeRepository.delete(deque);
+
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } else {
             List<Deque> dequeList = makeNewDeque();
-            if(dequeList != null) {
-                return popDequeRequest();
-            }
+
+            if(dequeList != null) return popDequeRequest();
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public List<Deque> makeNewDeque() {
+
         List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
+
         if(quotes.size() > 0) {
             Collections.shuffle(quotes);
+
             List<Deque> dequeList = quotes.stream().map(Deque::new).collect(Collectors.toList());
-            dequeRepository.saveAll(dequeList);
-            return dequeList;
+
+            return (List<Deque>) dequeRepository.saveAll(dequeList);
         }
+
         return null;
     }
 
     public ResponseEntity<Void> deleteDequeRequest() {
         dequeRepository.deleteAll();
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
