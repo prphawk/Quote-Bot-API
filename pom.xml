@@ -11,7 +11,7 @@
 	<groupId>com.maybot</groupId>
 	<artifactId>quotebot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mayquotebot</name>
+	<name>quote-bot-api</name>
 	<description>API for my quote bot</description>
 	<properties>
 		<java.version>11</java.version>
