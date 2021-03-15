@@ -90,24 +90,14 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<Void> deleteRequest(Long id) {
-
-        Optional<Quote> quoteSearch = quoteRepository.findById(id);
-
-        if(quoteSearch.isPresent()) {
-
-            quoteRepository.delete(quoteSearch.get());
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteAll() {
+        quoteRepository.deleteAll();
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> deleteAllRequest(List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(List<Long> ids) {
 
-        List<Quote> quotes = (List<Quote>) quoteRepository.findAllById(ids);
-
-        quoteRepository.deleteAll(quotes);
+        quoteRepository.deleteAll(quoteRepository.findAllById(ids));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,6 +1,9 @@
 package com.maybot.quotebot.entity;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,8 +17,9 @@ public class Deque implements Serializable {
     @Column(name = "id", nullable = false)
     protected Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quote_id", nullable = false)
+    //@OnDelete(action= OnDeleteAction.CASCADE)
     private Quote quote;
 
     @Column(name = "priority", nullable = false)

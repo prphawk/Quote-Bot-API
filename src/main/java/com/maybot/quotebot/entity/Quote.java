@@ -27,6 +27,9 @@ public class Quote {
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
+    @OneToOne(mappedBy = "quote", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Deque deque;
+
     public Quote() {}
 
     public Quote(QuoteModel model) {

@@ -28,11 +28,11 @@ public class DequeControllerImpl {
         return dequeServiceImpl.popDequeRequest();
     }
 
-    @GetMapping("all/")
+    @GetMapping("all")
     public ResponseEntity<List<DequeResponseModel>> getAll() {
         return dequeServiceImpl.getDeque();
     }
 
-    @DeleteMapping("all/")
+    @DeleteMapping("all")
     public ResponseEntity<Void> deleteAll() { return dequeServiceImpl.deleteDequeRequest(); }
 }

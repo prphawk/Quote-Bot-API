@@ -22,7 +22,7 @@ public class QuoteControllerImpl {
         this.quoteServiceImpl = quoteServiceImpl;
     }
 
-    @GetMapping("all/")
+    @GetMapping("all")
     public ResponseEntity<List<QuoteResponseModel>> getAll() {
         return quoteServiceImpl.getAllRequest();
     }
@@ -32,7 +32,7 @@ public class QuoteControllerImpl {
         return quoteServiceImpl.saveRequest(model);
     }
 
-    @PostMapping("all/")
+    @PostMapping("all")
     public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
         return quoteServiceImpl.saveAllRequest(model);
     }
@@ -43,13 +43,13 @@ public class QuoteControllerImpl {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> delete(@Valid @RequestBody Long id) {
-        return quoteServiceImpl.deleteRequest(id);
+    public ResponseEntity<Void> deleteByIds(@Valid @RequestBody List<Long> ids) {
+        return quoteServiceImpl.deleteByIds(ids);
     }
 
-    @DeleteMapping("all/")
-    public ResponseEntity<Void> deleteAll(@Valid @RequestBody List<Long> ids) {
-        return quoteServiceImpl.deleteAllRequest(ids);
+    @DeleteMapping("all")
+    public ResponseEntity<Void> deleteAll() {
+        return quoteServiceImpl.deleteAll();
     }
 
 
