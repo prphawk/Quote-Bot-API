@@ -23,7 +23,7 @@ public class Quote {
     @Column(name = "text", length = DataContants.QUOTE_TEXT_MAX, nullable = false)
     private String text;
 
-    @Column(name = "source", length = DataContants.QUOTE_SOURCE_MAX)
+    @Column(name = "source", length = DataContants.QUOTE_TEXT_MAX)
     private String source;
 
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

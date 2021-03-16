@@ -14,7 +14,7 @@ public class QuoteModel {
     @Size(min = 5, max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
     private String text;
 
-    @Size(max = DataContants.QUOTE_SOURCE_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
+    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
     private String source;
 
     @Valid
@@ -25,7 +25,7 @@ public class QuoteModel {
     public QuoteModel() {
     }
 
-    public QuoteModel(@NotNull(message = DataContants.QUOTE_TEXT_NULL_MESSAGE) @Size(min = 5, max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text, @Size(max = DataContants.QUOTE_SOURCE_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE) String source, @Valid List<ReplyModel> replies, boolean priority) {
+    public QuoteModel(@NotNull(message = DataContants.QUOTE_TEXT_NULL_MESSAGE) @Size(min = 5, max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text, @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE) String source, @Valid List<ReplyModel> replies, boolean priority) {
         this.text = text;
         this.source = source;
         this.replies = replies;
