@@ -2,6 +2,8 @@ package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.QuoteModel;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -27,7 +29,8 @@ public class Quote {
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
-    @OneToOne(mappedBy = "quote", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private Deque deque;
 
     public Quote() {}

@@ -89,7 +89,7 @@ public class QuoteServiceImpl {
 
     public ResponseEntity<Void> deleteAllRequest() {
         quoteRepository.deleteAll();
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteByIdsRequest(List<Long> ids) {
