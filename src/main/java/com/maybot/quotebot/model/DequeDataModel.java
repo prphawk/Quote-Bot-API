@@ -10,10 +10,14 @@ public class DequeResponseModel {
 
     private QuoteResponseModel quote;
 
+    public DequeResponseModel() {}
+
     public DequeResponseModel(Deque deque) {
         this.id = deque.getId();
-        this.quote = new QuoteResponseModel(deque.getQuote());
         this.priority = deque.isPriority();
+        if(deque.getQuote() != null) {
+            this.quote = new QuoteResponseModel(deque.getQuote());
+        }
     }
 
     public Long getId() {
