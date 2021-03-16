@@ -44,7 +44,7 @@ public class DequeServiceImpl {
 
             QuoteResponseModel response = new QuoteResponseModel(deque.getQuote());
 
-            dequeRepository.delete(deque);
+            dequeRepository.deleteById(deque.getId());
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 

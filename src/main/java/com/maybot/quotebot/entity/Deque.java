@@ -19,7 +19,6 @@ public class Deque implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quote_id", nullable = false)
-    //@OnDelete(action= OnDeleteAction.CASCADE)
     private Quote quote;
 
     @Column(name = "priority", nullable = false)

@@ -17,5 +17,4 @@ public interface DequeRepository extends CrudRepository<Deque, Long>  {
 
     @Query("SELECT d FROM Deque d ORDER BY d.priority DESC, d.id")
     Optional<Deque> findPriorityFirst(PageRequest pageable);
-
 }
