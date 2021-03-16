@@ -2,21 +2,21 @@ package com.maybot.quotebot.model;
 
 import com.maybot.quotebot.entity.Deque;
 
-public class DequeResponseModel {
+public class DequeDataModel {
 
     protected Long id;
 
     private boolean priority;
 
-    private QuoteResponseModel quote;
+    private QuoteDataModel quote;
 
-    public DequeResponseModel() {}
+    public DequeDataModel() {}
 
-    public DequeResponseModel(Deque deque) {
+    public DequeDataModel(Deque deque) {
         this.id = deque.getId();
         this.priority = deque.isPriority();
         if(deque.getQuote() != null) {
-            this.quote = new QuoteResponseModel(deque.getQuote());
+            this.quote = new QuoteDataModel(deque.getQuote());
         }
     }
 
@@ -28,11 +28,11 @@ public class DequeResponseModel {
         this.id = id;
     }
 
-    public QuoteResponseModel getQuote() {
+    public QuoteDataModel getQuote() {
         return quote;
     }
 
-    public void setQuote(QuoteResponseModel quote) {
+    public void setQuote(QuoteDataModel quote) {
         this.quote = quote;
     }
 

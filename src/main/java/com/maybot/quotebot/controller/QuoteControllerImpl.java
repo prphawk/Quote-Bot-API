@@ -2,7 +2,7 @@ package com.maybot.quotebot.controller;
 
 import com.maybot.quotebot.model.AllQuoteModel;
 import com.maybot.quotebot.model.QuoteModel;
-import com.maybot.quotebot.model.QuoteResponseModel;
+import com.maybot.quotebot.model.QuoteDataModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,33 +23,33 @@ public class QuoteControllerImpl {
     }
 
     @GetMapping("all")
-    public ResponseEntity<List<QuoteResponseModel>> getAll() {
+    public ResponseEntity<List<QuoteDataModel>> getAll() {
         return quoteServiceImpl.getAllRequest();
     }
 
     @PostMapping
-    public ResponseEntity<QuoteResponseModel> save(@Valid @RequestBody QuoteModel model) {
+    public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody QuoteModel model) {
         return quoteServiceImpl.saveRequest(model);
     }
 
     @PostMapping("all")
-    public ResponseEntity<List<QuoteResponseModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
+    public ResponseEntity<List<QuoteDataModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
         return quoteServiceImpl.saveAllRequest(model);
     }
 
     @PutMapping
-    public ResponseEntity<QuoteResponseModel> edit(@Valid @RequestBody QuoteResponseModel model) {
+    public ResponseEntity<QuoteDataModel> edit(@Valid @RequestBody QuoteDataModel model) {
         return quoteServiceImpl.editRequest(model);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteByIds(@Valid @RequestBody List<Long> ids) {
-        return quoteServiceImpl.deleteByIds(ids);
+        return quoteServiceImpl.deleteByIdsRequest(ids);
     }
 
     @DeleteMapping("all")
     public ResponseEntity<Void> deleteAll() {
-        return quoteServiceImpl.deleteAll();
+        return quoteServiceImpl.deleteAllRequest();
     }
 
 

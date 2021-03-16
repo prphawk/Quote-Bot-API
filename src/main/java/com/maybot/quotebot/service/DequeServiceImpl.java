@@ -26,23 +26,23 @@ public class DequeServiceImpl {
         this.dequeRepository = dequeRepository;
     }
 
-    public ResponseEntity<List<DequeResponseModel>> getDeque() {
+    public ResponseEntity<List<DequeDataModel>> getDequeRequest() {
 
         List<Deque> deque = dequeRepository.findAllPriorityFirst();
 
-        List<DequeResponseModel> response = deque.stream().map(DequeResponseModel::new).collect(Collectors.toList());
+        List<DequeDataModel> response = deque.stream().map(DequeDataModel::new).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<QuoteResponseModel> popDequeRequest() {
+    public ResponseEntity<QuoteDataModel> popDequeRequest() {
 
         Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0,1));
 
         if(dequeSearch.isPresent()) {
             Deque deque = dequeSearch.get();
 
-            QuoteResponseModel response = new QuoteResponseModel(deque.getQuote());
+            QuoteDataModel response = new QuoteDataModel(deque.getQuote());
 
             dequeRepository.deleteById(deque.getId());
 
@@ -76,6 +76,39 @@ public class DequeServiceImpl {
         dequeRepository.deleteAll();
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<DequeDataModel>> shuffleDequeRequest() {
+
+        List<Deque> dequeList = (List<Deque>) dequeRepository.findAll();
+
+        if(dequeList.size() > 0) {
+
+            List<Quote> quotesFromDeque = dequeList.stream().map(Deque::getQuote).collect(Collectors.toList());
+
+            Collections.shuffle(quotesFromDeque);
+
+            dequeRepository.deleteAll();
+
+            List<Deque> newDequeList = quotesFromDeque.stream().map(Deque::new).collect(Collectors.toList());
+
+            dequeRepository.saveAll(newDequeList);
+
+            return getDequeRequest();
+
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<List<DequeDataModel>> editPrioritiesRequest(List<DequeDataModel> dequeList) {
+        dequeList.forEach(d -> {
+            dequeRepository.findById(d.getId()).ifPresent(deque -> {
+                deque.setPriority(d.isPriority());
+                dequeRepository.save(deque);
+            });
+        });
+
+        return getDequeRequest();
     }
 
 }

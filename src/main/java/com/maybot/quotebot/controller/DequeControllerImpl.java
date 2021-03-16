@@ -1,15 +1,13 @@
 package com.maybot.quotebot.controller;
 
-import com.maybot.quotebot.model.DequeResponseModel;
-import com.maybot.quotebot.model.QuoteResponseModel;
+import com.maybot.quotebot.model.DequeDataModel;
+import com.maybot.quotebot.model.QuoteDataModel;
 import com.maybot.quotebot.service.DequeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,13 +22,21 @@ public class DequeControllerImpl {
     }
 
     @GetMapping
-    public ResponseEntity<QuoteResponseModel> popDeque() {
+    public ResponseEntity<QuoteDataModel> popDeque() {
         return dequeServiceImpl.popDequeRequest();
     }
 
     @GetMapping("all")
-    public ResponseEntity<List<DequeResponseModel>> getAll() {
-        return dequeServiceImpl.getDeque();
+    public ResponseEntity<List<DequeDataModel>> getAll() {
+        return dequeServiceImpl.getDequeRequest();
+    }
+
+    @GetMapping("shuffle")
+    public ResponseEntity<List<DequeDataModel>> shuffle() { return dequeServiceImpl.shuffleDequeRequest(); }
+
+    @PutMapping("priority")
+    public ResponseEntity<List<DequeDataModel>> editPriorities(@Valid @RequestBody List<DequeDataModel> dequeList) {
+        return dequeServiceImpl.editPrioritiesRequest(dequeList);
     }
 
     @DeleteMapping("all")

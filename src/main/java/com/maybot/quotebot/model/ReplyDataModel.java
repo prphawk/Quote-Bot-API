@@ -2,15 +2,15 @@ package com.maybot.quotebot.model;
 
 import com.maybot.quotebot.entity.Reply;
 
-public class ReplyResponseModel {
+public class ReplyDataModel {
 
     private Long id;
 
     private String text;
 
-    public ReplyResponseModel() {}
+    public ReplyDataModel() {}
 
-    public ReplyResponseModel(Reply reply) {
+    public ReplyDataModel(Reply reply) {
         this.id = reply.getId();
         this.text = reply.getText();
     }

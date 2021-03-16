@@ -4,7 +4,7 @@ import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.entity.Reply;
 import com.maybot.quotebot.model.QuoteModel;
 import com.maybot.quotebot.model.ReplyModel;
-import com.maybot.quotebot.model.ReplyResponseModel;
+import com.maybot.quotebot.model.ReplyDataModel;
 import com.maybot.quotebot.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class ReplyServiceImpl {
         this.replyRepository = replyRepository;
     }
 
-    public List<ReplyResponseModel> saveReplies(QuoteModel model, Quote quote) {
+    public List<ReplyDataModel> saveReplies(QuoteModel model, Quote quote) {
 
         List<ReplyModel> replyModels = model.getReplies();
 
@@ -32,7 +32,7 @@ public class ReplyServiceImpl {
         return null;
     }
 
-    public List<ReplyResponseModel> editReplies(List<ReplyResponseModel> models, Quote quote) {
+    public List<ReplyDataModel> editReplies(List<ReplyDataModel> models, Quote quote) {
 
         return models.stream().map(model -> {
 
@@ -48,26 +48,26 @@ public class ReplyServiceImpl {
         }).collect(Collectors.toList());
     }
 
-    private ReplyResponseModel saveChanges(Reply reply, ReplyResponseModel model, Quote quote) {
+    private ReplyDataModel saveChanges(Reply reply, ReplyDataModel model, Quote quote) {
 
         reply.setText(model.getText());
 
         reply.setQuote(quote);
 
-        return new ReplyResponseModel(replyRepository.save(reply));
+        return new ReplyDataModel(replyRepository.save(reply));
     }
 
-    private ReplyResponseModel saveReply(ReplyModel model, Quote quote) {
+    private ReplyDataModel saveReply(ReplyModel model, Quote quote) {
 
         Reply reply = new Reply(model, quote);
 
-        return new ReplyResponseModel(replyRepository.save(reply));
+        return new ReplyDataModel(replyRepository.save(reply));
     }
 
-    private ReplyResponseModel saveReply(ReplyResponseModel model, Quote quote) {
+    private ReplyDataModel saveReply(ReplyDataModel model, Quote quote) {
 
         Reply reply = new Reply(model, quote);
 
-        return new ReplyResponseModel(replyRepository.save(reply));
+        return new ReplyDataModel(replyRepository.save(reply));
     }
 }

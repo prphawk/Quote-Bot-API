@@ -2,17 +2,14 @@ package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Deque;
 import com.maybot.quotebot.entity.Quote;
-import com.maybot.quotebot.entity.Reply;
 import com.maybot.quotebot.model.*;
 import com.maybot.quotebot.repository.QuoteRepository;
 import com.maybot.quotebot.repository.DequeRepository;
-import com.maybot.quotebot.repository.ReplyRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,22 +28,22 @@ public class QuoteServiceImpl {
         this.replyServiceImpl = replyServiceImpl;
     }
 
-    public ResponseEntity<List<QuoteResponseModel>> getAllRequest() {
+    public ResponseEntity<List<QuoteDataModel>> getAllRequest() {
 
         List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
 
-        List<QuoteResponseModel> response = quotes.stream().map(QuoteResponseModel::new).collect(Collectors.toList());
+        List<QuoteDataModel> response = quotes.stream().map(QuoteDataModel::new).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public QuoteResponseModel save(@Valid QuoteModel model) {
+    public QuoteDataModel save(@Valid QuoteModel model) {
 
         Quote quote = new Quote(model);
 
         quoteRepository.save(quote);
 
-        QuoteResponseModel response = new QuoteResponseModel(quote);
+        QuoteDataModel response = new QuoteDataModel(quote);
 
         response.setReplies(replyServiceImpl.saveReplies(model, quote));
 
@@ -55,25 +52,25 @@ public class QuoteServiceImpl {
         return response;
     }
 
-    public ResponseEntity<QuoteResponseModel> saveRequest(QuoteModel model) {
+    public ResponseEntity<QuoteDataModel> saveRequest(QuoteModel model) {
 
-        QuoteResponseModel response = save(model);
+        QuoteDataModel response = save(model);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<List<QuoteResponseModel>> saveAllRequest(@Valid AllQuoteModel model) {
+    public ResponseEntity<List<QuoteDataModel>> saveAllRequest(@Valid AllQuoteModel model) {
 
         List<QuoteModel> quotes = model.getQuotes();
 
         if(model.isShuffle()) Collections.shuffle(quotes);
 
-        List<QuoteResponseModel> response = quotes.stream().map(this::save).collect(Collectors.toList());
+        List<QuoteDataModel> response = quotes.stream().map(this::save).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<QuoteResponseModel> editRequest(@Valid QuoteResponseModel model) {
+    public ResponseEntity<QuoteDataModel> editRequest(@Valid QuoteDataModel model) {
 
         Optional<Quote> quoteSearch = quoteRepository.findById(model.getId());
 
@@ -81,7 +78,7 @@ public class QuoteServiceImpl {
 
             Quote quote = quoteSearch.get();
 
-            QuoteResponseModel response = saveChanges(model, quote);
+            QuoteDataModel response = saveChanges(model, quote);
 
             response.setReplies(replyServiceImpl.editReplies(model.getReplies(), quote));
 
@@ -90,24 +87,24 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<Void> deleteAllRequest() {
         quoteRepository.deleteAll();
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> deleteByIds(List<Long> ids) {
+    public ResponseEntity<Void> deleteByIdsRequest(List<Long> ids) {
 
         quoteRepository.deleteAll(quoteRepository.findAllById(ids));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private QuoteResponseModel saveChanges(QuoteResponseModel model, Quote quote) {
+    private QuoteDataModel saveChanges(QuoteDataModel model, Quote quote) {
 
         quote.setText(model.getText());
 
         quote.setSource(model.getSource());
 
-        return new QuoteResponseModel(quoteRepository.save(quote));
+        return new QuoteDataModel(quoteRepository.save(quote));
     }
 }
