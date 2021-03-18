@@ -6,14 +6,20 @@ import java.util.List;
 
 public class AllQuoteModel {
 
-    @NotNull
-    private Boolean shuffle;
+    private boolean shuffle;
 
     @NotNull
     @Valid
     private List<QuoteModel> quotes;
 
-    public AllQuoteModel(boolean shuffle, @NotNull @Valid List<QuoteModel> quotes) {
+    public AllQuoteModel() {}
+
+    public AllQuoteModel(List<QuoteModel> quotes) {
+        this.shuffle = false;
+        this.quotes = quotes;
+    }
+
+    public AllQuoteModel(boolean shuffle, List<QuoteModel> quotes) {
         this.shuffle = shuffle;
         this.quotes = quotes;
     }

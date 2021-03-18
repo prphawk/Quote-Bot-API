@@ -2,12 +2,13 @@ package com.maybot.quotebot.model;
 
 import com.maybot.quotebot.entity.Quote;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class QuoteDataModel {
 
-    //botar os valid aqui
+    @NotNull
     private Long id;
 
     private String text;
