@@ -22,16 +22,16 @@ public class DequeControllerImpl {
     }
 
     @GetMapping
+    public ResponseEntity<List<DequeDataModel>> get() {
+        return dequeServiceImpl.getDequeRequest();
+    }
+
+    @PutMapping
     public ResponseEntity<QuoteDataModel> popDeque() {
         return dequeServiceImpl.popDequeRequest();
     }
 
-    @GetMapping("all")
-    public ResponseEntity<List<DequeDataModel>> getAll() {
-        return dequeServiceImpl.getDequeRequest();
-    }
-
-    @GetMapping("shuffle")
+    @PutMapping("shuffle")
     public ResponseEntity<List<DequeDataModel>> shuffle() { return dequeServiceImpl.shuffleDequeRequest(); }
 
     @PutMapping("priority")

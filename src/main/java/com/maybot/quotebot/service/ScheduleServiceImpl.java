@@ -6,6 +6,7 @@ import com.maybot.quotebot.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,39 +20,42 @@ public class ScheduleServiceImpl {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public ScheduleModel getSchedule() {
+    public List<ScheduleModel> getSchedule() {
+
         List<Schedule> scheduleList = (List<Schedule>) scheduleRepository.findAll();
-        return new ScheduleModel(scheduleList);
+
+        return scheduleList.stream().map(ScheduleModel::new).collect(Collectors.toList());
     }
 
-    public ScheduleModel saveSchedule(ScheduleModel model) {
+    public List<ScheduleModel> saveSchedule(List<Byte> bytes) {
+
         scheduleRepository.deleteAll();
 
-        List<Schedule> scheduleList = (List<Schedule>)
-                scheduleRepository.saveAll(
-                    model.getHours()
-                            .stream().map(Schedule::new)
-                            .collect(Collectors.toList())
-        );
+        List<ScheduleModel> response = new ArrayList<>();
 
-        return new ScheduleModel(scheduleList);
+        bytes.forEach(b -> response.add(new ScheduleModel(scheduleRepository.save(new Schedule(b)))));
+
+        return response;
     }
 
 
     public boolean isItTime() {
 
-        Optional<Schedule> scheduleSearch = scheduleRepository.findScheduleByHour(
-                (byte) LocalDateTime.now().getHour()
-        );
+        LocalDateTime now = LocalDateTime.now();
+
+        Optional<Schedule> scheduleSearch = scheduleRepository.findScheduleByHour((byte) now.getHour());
 
         if(scheduleSearch.isPresent()) {
             Schedule schedule = scheduleSearch.get();
-            schedule.setLastPosted(LocalDateTime.now());
-            scheduleRepository.save(schedule);
-            return true;
+
+            if(schedule.getLastPosted().getHour() != now.getHour()) {
+                schedule.setLastPosted(now);
+                scheduleRepository.save(schedule);
+                return true;
+            }
         }
 
-        return false;
+        return scheduleRepository.findScheduleByHour((byte) -1).isPresent();
     }
 
 }
