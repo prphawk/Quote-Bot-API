@@ -37,29 +37,37 @@ public class DequeServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<QuoteDataModel> popDequeRequest() {
+    public ResponseEntity<QuoteDataModel> popDequeRequest(boolean forcePop) {
 
-        if(scheduleServiceImpl.isItTime()) {
-
-            Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0, 1));
-
-            if (dequeSearch.isPresent()) {
-                Deque deque = dequeSearch.get();
-
-                QuoteDataModel response = new QuoteDataModel(deque.getQuote());
-
-                dequeRepository.deleteById(deque.getId());
-
-                return new ResponseEntity<>(response, HttpStatus.OK);
-
-            } else {
-                List<Deque> dequeList = makeNewDeque();
-
-                if (dequeList != null) return popDequeRequest();
-            }
+        if(scheduleServiceImpl.isItTime() || forcePop) {
+            QuoteDataModel response = popDeque();
+            if(response != null)
+                return new ResponseEntity<>(HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public QuoteDataModel popDeque() {
+
+        Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0, 1));
+
+        if (dequeSearch.isPresent()) {
+            Deque deque = dequeSearch.get();
+
+            QuoteDataModel response = new QuoteDataModel(deque.getQuote());
+
+            dequeRepository.deleteById(deque.getId());
+
+            return response;
+
+        } else {
+            List<Deque> dequeList = makeNewDeque();
+
+            if (dequeList != null) return popDeque();
+        }
+
+        return null;
     }
 
     public List<Deque> makeNewDeque() {

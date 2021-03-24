@@ -28,7 +28,12 @@ public class DequeControllerImpl {
 
     @PutMapping
     public ResponseEntity<QuoteDataModel> popDeque() {
-        return dequeServiceImpl.popDequeRequest();
+        return dequeServiceImpl.popDequeRequest(false);
+    }
+
+    @PutMapping("force-pop")
+    public ResponseEntity<QuoteDataModel> forcePopDeque() {
+        return dequeServiceImpl.popDequeRequest(true);
     }
 
     @PutMapping("shuffle")
