@@ -42,7 +42,7 @@ public class DequeServiceImpl {
         if(scheduleServiceImpl.isItTime() || forcePop) {
             QuoteDataModel response = popDeque();
             if(response != null)
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
