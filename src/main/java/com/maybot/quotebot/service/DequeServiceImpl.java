@@ -19,11 +19,13 @@ public class DequeServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final DequeRepository dequeRepository;
+    private final ScheduleServiceImpl scheduleServiceImpl;
 
 
-    public DequeServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository) {
+    public DequeServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository, ScheduleServiceImpl scheduleServiceImpl) {
         this.quoteRepository = quoteRepository;
         this.dequeRepository = dequeRepository;
+        this.scheduleServiceImpl = scheduleServiceImpl;
     }
 
     public ResponseEntity<List<DequeDataModel>> getDequeRequest() {
@@ -37,21 +39,24 @@ public class DequeServiceImpl {
 
     public ResponseEntity<QuoteDataModel> popDequeRequest() {
 
-        Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0,1));
+        if(scheduleServiceImpl.isItTime()) {
 
-        if(dequeSearch.isPresent()) {
-            Deque deque = dequeSearch.get();
+            Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0, 1));
 
-            QuoteDataModel response = new QuoteDataModel(deque.getQuote());
+            if (dequeSearch.isPresent()) {
+                Deque deque = dequeSearch.get();
 
-            dequeRepository.deleteById(deque.getId());
+                QuoteDataModel response = new QuoteDataModel(deque.getQuote());
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+                dequeRepository.deleteById(deque.getId());
 
-        } else {
-            List<Deque> dequeList = makeNewDeque();
+                return new ResponseEntity<>(response, HttpStatus.OK);
 
-            if(dequeList != null) return popDequeRequest();
+            } else {
+                List<Deque> dequeList = makeNewDeque();
+
+                if (dequeList != null) return popDequeRequest();
+            }
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
