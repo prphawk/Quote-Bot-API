@@ -4,8 +4,6 @@ import com.maybot.quotebot.constant.DataContants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -19,19 +17,14 @@ public class QuoteModel {
     @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
     private String source;
 
+    private boolean hideSource;
+
     @Valid
     private List<ReplyModel> replies;
 
     private boolean priority;
 
     public QuoteModel() {
-    }
-
-    public QuoteModel(@NotNull(message = DataContants.QUOTE_TEXT_EMPTY_MESSAGE) @Size(min = 5, max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text, @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE) String source, @Valid List<ReplyModel> replies, boolean priority) {
-        this.text = text;
-        this.source = source;
-        this.replies = replies;
-        this.priority = priority;
     }
 
     public String getText() {
@@ -64,5 +57,13 @@ public class QuoteModel {
 
     public void setPriority(boolean priority) {
         this.priority = priority;
+    }
+
+    public boolean getHideSource() {
+        return hideSource;
+    }
+
+    public void setHideSource(boolean hideSource) {
+        this.hideSource = hideSource;
     }
 }

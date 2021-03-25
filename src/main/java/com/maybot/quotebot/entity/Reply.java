@@ -2,17 +2,15 @@ package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.ReplyModel;
-import com.maybot.quotebot.model.ReplyDataModel;
+import com.maybot.quotebot.model.data.ReplyDataModel;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 public class Reply {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     protected Long id;
 

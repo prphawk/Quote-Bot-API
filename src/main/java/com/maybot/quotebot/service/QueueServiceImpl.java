@@ -1,9 +1,10 @@
 package com.maybot.quotebot.service;
 
-import com.maybot.quotebot.entity.Deque;
+import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
+import com.maybot.quotebot.model.data.QueueDataModel;
+import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.repository.*;
-import com.maybot.quotebot.model.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,32 +16,32 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DequeServiceImpl {
+public class QueueServiceImpl {
 
     private final QuoteRepository quoteRepository;
-    private final DequeRepository dequeRepository;
+    private final QueueRepository queueRepository;
     private final ScheduleServiceImpl scheduleServiceImpl;
 
 
-    public DequeServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository, ScheduleServiceImpl scheduleServiceImpl) {
+    public QueueServiceImpl(QuoteRepository quoteRepository, QueueRepository queueRepository, ScheduleServiceImpl scheduleServiceImpl) {
         this.quoteRepository = quoteRepository;
-        this.dequeRepository = dequeRepository;
+        this.queueRepository = queueRepository;
         this.scheduleServiceImpl = scheduleServiceImpl;
     }
 
-    public ResponseEntity<List<DequeDataModel>> getDequeRequest() {
+    public ResponseEntity<List<QueueDataModel>> getQueueRequest() {
 
-        List<Deque> deque = dequeRepository.findAllPriorityFirst();
+        List<Queue> queue = queueRepository.findAllPriorityFirst();
 
-        List<DequeDataModel> response = deque.stream().map(DequeDataModel::new).collect(Collectors.toList());
+        List<QueueDataModel> response = queue.stream().map(QueueDataModel::new).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<QuoteDataModel> popDequeRequest(boolean forcePop) {
+    public ResponseEntity<QuoteDataModel> popQueueRequest(boolean forcePop) {
 
         if(scheduleServiceImpl.isItTime() || forcePop) {
-            QuoteDataModel response = popDeque();
+            QuoteDataModel response = popQueue();
             if(response != null)
                 return new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -48,80 +49,81 @@ public class DequeServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public QuoteDataModel popDeque() {
+    public QuoteDataModel popQueue() {
 
-        Optional<Deque> dequeSearch = dequeRepository.findPriorityFirst(PageRequest.of(0, 1));
+        Optional<Queue> queueSearch = queueRepository.findPriorityFirst(PageRequest.of(0, 1));
 
-        if (dequeSearch.isPresent()) {
-            Deque deque = dequeSearch.get();
+        if (queueSearch.isPresent()) {
+            Queue queue = queueSearch.get();
 
-            QuoteDataModel response = new QuoteDataModel(deque.getQuote());
+            QuoteDataModel response = new QuoteDataModel(queue.getQuote());
 
-            dequeRepository.deleteById(deque.getId());
+            queueRepository.deleteById(queue.getId());
 
             return response;
 
         } else {
-            List<Deque> dequeList = makeNewDeque();
+            List<Queue> queueList = makeNewQueue();
 
-            if (dequeList != null) return popDeque();
+            if (queueList != null) return popQueue();
         }
 
         return null;
     }
 
-    public List<Deque> makeNewDeque() {
+    public List<Queue> makeNewQueue() {
 
         List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
 
         if(quotes.size() > 0) {
             Collections.shuffle(quotes);
 
-            List<Deque> dequeList = quotes.stream().map(Deque::new).collect(Collectors.toList());
+            List<Queue> queueList = quotes.stream().map(Queue::new).collect(Collectors.toList());
 
-            return (List<Deque>) dequeRepository.saveAll(dequeList);
+            return (List<Queue>) queueRepository.saveAll(queueList);
         }
 
         return null;
     }
 
-    public ResponseEntity<Void> deleteDequeRequest() {
-        dequeRepository.deleteAll();
+    public ResponseEntity<Void> deleteQueueRequest() {
+        queueRepository.deleteAll();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<List<DequeDataModel>> shuffleDequeRequest() {
+    public ResponseEntity<List<QueueDataModel>> shuffleQueueRequest() {
 
-        List<Deque> dequeListNotPriority = dequeRepository.findByPriorityFalse();
+        List<Queue> queueNotPriority = queueRepository.findByPriorityFalse();
 
-        if(dequeListNotPriority.size() > 0) {
+        if(queueNotPriority.size() > 0) {
 
-            List<Quote> quotesFromDeque = dequeListNotPriority.stream().map(Deque::getQuote).collect(Collectors.toList());
+            List<Quote> quotesFromQueue = queueNotPriority.stream().map(Queue::getQuote).collect(Collectors.toList());
 
-            Collections.shuffle(quotesFromDeque);
+            Collections.shuffle(quotesFromQueue);
 
-            dequeRepository.deleteAll(dequeListNotPriority);
+            queueRepository.deleteAll(queueNotPriority);
 
-            List<Deque> newDequeList = quotesFromDeque.stream().map(Deque::new).collect(Collectors.toList());
+            List<Queue> newQueueList = quotesFromQueue.stream().map(Queue::new).collect(Collectors.toList());
 
-            dequeRepository.saveAll(newDequeList);
+            queueRepository.saveAll(newQueueList);
 
-            return getDequeRequest();
+            return getQueueRequest();
 
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<List<DequeDataModel>> editPrioritiesRequest(List<DequeDataModel> dequeList) {
-        dequeList.forEach(d -> {
-            dequeRepository.findById(d.getId()).ifPresent(deque -> {
-                deque.setPriority(d.isPriority());
-                dequeRepository.save(deque);
+    public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<QueueDataModel> queueAll) {
+        queueAll.forEach(model -> {
+            queueRepository.findById(model.getId())
+                    .ifPresent(queue -> {
+                        queue.setPriority(model.isPriority());
+                        queueRepository.save(queue);
             });
         });
 
-        return getDequeRequest();
+        return getQueueRequest();
     }
 
 }

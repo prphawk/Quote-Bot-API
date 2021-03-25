@@ -1,10 +1,11 @@
 package com.maybot.quotebot.service;
 
-import com.maybot.quotebot.entity.Deque;
+import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.*;
+import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.repository.QuoteRepository;
-import com.maybot.quotebot.repository.DequeRepository;
+import com.maybot.quotebot.repository.QueueRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,12 @@ import java.util.stream.Collectors;
 public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
-    private final DequeRepository dequeRepository;
+    private final QueueRepository queueRepository;
     private final ReplyServiceImpl replyServiceImpl;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, DequeRepository dequeRepository, ReplyServiceImpl replyServiceImpl) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueRepository queueRepository, ReplyServiceImpl replyServiceImpl) {
         this.quoteRepository = quoteRepository;
-        this.dequeRepository = dequeRepository;
+        this.queueRepository = queueRepository;
         this.replyServiceImpl = replyServiceImpl;
     }
 
@@ -47,7 +48,7 @@ public class QuoteServiceImpl {
 
         response.setReplies(replyServiceImpl.saveReplies(model, quote));
 
-        dequeRepository.save(new Deque(quote, model.isPriority()));
+        queueRepository.save(new Queue(quote, model.isPriority()));
 
         return response;
     }

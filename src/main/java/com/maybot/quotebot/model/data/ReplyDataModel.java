@@ -1,4 +1,4 @@
-package com.maybot.quotebot.model;
+package com.maybot.quotebot.model.data;
 
 import com.maybot.quotebot.entity.Reply;
 

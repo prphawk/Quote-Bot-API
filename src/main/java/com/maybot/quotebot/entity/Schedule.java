@@ -3,14 +3,12 @@ package com.maybot.quotebot.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.GenerationType.AUTO;
-
 @Entity
 @Table(name = "schedule")
 public class Schedule {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     protected Long id;
 

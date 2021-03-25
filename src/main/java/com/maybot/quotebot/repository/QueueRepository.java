@@ -1,6 +1,6 @@
 package com.maybot.quotebot.repository;
 
-import com.maybot.quotebot.entity.Deque;
+import com.maybot.quotebot.entity.Queue;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DequeRepository extends CrudRepository<Deque, Long>  {
+public interface QueueRepository extends CrudRepository<Queue, Long>  {
 
-    @Query("SELECT d FROM Deque d ORDER BY d.priority DESC, d.id")
-    List<Deque> findAllPriorityFirst();
+    @Query("SELECT q FROM Queue q ORDER BY q.priority DESC, q.id")
+    List<Queue> findAllPriorityFirst();
 
-    @Query("SELECT d FROM Deque d ORDER BY d.priority DESC, d.id")
-    Optional<Deque> findPriorityFirst(PageRequest pageable);
+    @Query("SELECT q FROM Queue q ORDER BY q.priority DESC, q.id")
+    Optional<Queue> findPriorityFirst(PageRequest pageable);
 
-    List<Deque> findByPriorityFalse();
+    List<Queue> findByPriorityFalse();
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Deque d WHERE d.id = :id")
+    @Query("DELETE FROM Queue q WHERE q.id = :id")
     void deleteById(@NotNull @Param("id") Long id);
 }

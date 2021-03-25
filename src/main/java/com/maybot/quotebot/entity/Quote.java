@@ -2,21 +2,15 @@ package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.QuoteModel;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
-
 import java.util.List;
-
-import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @Table(name = "quote")
 public class Quote {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     protected Long id;
 
@@ -26,18 +20,21 @@ public class Quote {
     @Column(name = "source", length = DataContants.QUOTE_TEXT_MAX)
     private String source;
 
+    @Column(name = "hideSource")
+    private boolean hideSource;
+
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
     @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action=OnDeleteAction.CASCADE)
-    private Deque deque;
+    private Queue queue;
 
     public Quote() {}
 
     public Quote(QuoteModel model) {
         this.text = model.getText();
         this.source = model.getSource();
+        this.hideSource = model.getHideSource();
     }
 
     public Long getId() {
@@ -70,5 +67,13 @@ public class Quote {
 
     public void setReplies(List<Reply> replies) {
         this.replies = replies;
+    }
+
+    public boolean getHideSource() {
+        return hideSource;
+    }
+
+    public void setHideSource(boolean hideSource) {
+        this.hideSource = hideSource;
     }
 }

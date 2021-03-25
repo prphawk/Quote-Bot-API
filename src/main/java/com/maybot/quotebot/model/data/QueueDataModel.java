@@ -1,8 +1,8 @@
-package com.maybot.quotebot.model;
+package com.maybot.quotebot.model.data;
 
-import com.maybot.quotebot.entity.Deque;
+import com.maybot.quotebot.entity.Queue;
 
-public class DequeDataModel {
+public class QueueDataModel {
 
     protected Long id;
 
@@ -10,13 +10,13 @@ public class DequeDataModel {
 
     private QuoteDataModel quote;
 
-    public DequeDataModel() {}
+    public QueueDataModel() {}
 
-    public DequeDataModel(Deque deque) {
-        this.id = deque.getId();
-        this.priority = deque.isPriority();
-        if(deque.getQuote() != null) {
-            this.quote = new QuoteDataModel(deque.getQuote());
+    public QueueDataModel(Queue queue) {
+        this.id = queue.getId();
+        this.priority = queue.isPriority();
+        if(queue.getQuote() != null) {
+            this.quote = new QuoteDataModel(queue.getQuote());
         }
     }
 
