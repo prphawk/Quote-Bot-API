@@ -15,6 +15,8 @@ public class QuoteDataModel {
 
     private String source;
 
+    private boolean hideSource;
+
     private List<ReplyDataModel> replies;
 
     public QuoteDataModel() {}
@@ -23,8 +25,17 @@ public class QuoteDataModel {
         this.id = quote.getId();
         this.text = quote.getText();
         this.source = quote.getSource();
+        this.hideSource = quote.getHideSource();
         if(quote.getReplies() != null)
             this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
+    }
+
+    public boolean isHideSource() {
+        return hideSource;
+    }
+
+    public void setHideSource(boolean hideSource) {
+        this.hideSource = hideSource;
     }
 
     public Long getId() {
