@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "deque")
-public class Deque implements Serializable {
+@Table(name = "queue")
+public class Queue implements Serializable {
 
     @Id
     @GeneratedValue
@@ -19,14 +19,14 @@ public class Deque implements Serializable {
     @Column(name = "priority", nullable = false)
     private boolean priority;
 
-    public Deque() {}
+    public Queue() {}
 
-    public Deque(Quote quote) {
+    public Queue(Quote quote) {
         this.quote = quote;
         this.priority = false;
     }
 
-    public Deque(Quote quote, boolean priority) {
+    public Queue(Quote quote, boolean priority) {
         this.quote = quote;
         this.priority = priority;
     }

@@ -1,8 +1,8 @@
 package com.maybot.quotebot.controller;
 
-import com.maybot.quotebot.model.DequeDataModel;
-import com.maybot.quotebot.model.QuoteDataModel;
-import com.maybot.quotebot.service.DequeServiceImpl;
+import com.maybot.quotebot.model.data.QueueDataModel;
+import com.maybot.quotebot.model.data.QuoteDataModel;
+import com.maybot.quotebot.service.QueueServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,39 +11,39 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/deque/")
-public class DequeControllerImpl {
+@RequestMapping("/queue/")
+public class QueueControllerImpl {
 
-    private final DequeServiceImpl dequeServiceImpl;
+    private final QueueServiceImpl queueServiceImpl;
 
     @Autowired
-    public DequeControllerImpl(DequeServiceImpl dequeServiceImpl) {
-        this.dequeServiceImpl = dequeServiceImpl;
+    public QueueControllerImpl(QueueServiceImpl queueServiceImpl) {
+        this.queueServiceImpl = queueServiceImpl;
     }
 
     @GetMapping
-    public ResponseEntity<List<DequeDataModel>> get() {
-        return dequeServiceImpl.getDequeRequest();
+    public ResponseEntity<List<QueueDataModel>> get() {
+        return queueServiceImpl.getQueueRequest();
     }
 
     @PutMapping
-    public ResponseEntity<QuoteDataModel> popDeque() {
-        return dequeServiceImpl.popDequeRequest(false);
+    public ResponseEntity<QuoteDataModel> popQueue() {
+        return queueServiceImpl.popQueueRequest(false);
     }
 
     @PutMapping("force-pop")
-    public ResponseEntity<QuoteDataModel> forcePopDeque() {
-        return dequeServiceImpl.popDequeRequest(true);
+    public ResponseEntity<QuoteDataModel> forcePopQueue() {
+        return queueServiceImpl.popQueueRequest(true);
     }
 
     @PutMapping("shuffle")
-    public ResponseEntity<List<DequeDataModel>> shuffle() { return dequeServiceImpl.shuffleDequeRequest(); }
+    public ResponseEntity<List<QueueDataModel>> shuffle() { return queueServiceImpl.shuffleQueueRequest(); }
 
     @PutMapping("priority")
-    public ResponseEntity<List<DequeDataModel>> editPriorities(@Valid @RequestBody List<DequeDataModel> dequeList) {
-        return dequeServiceImpl.editPrioritiesRequest(dequeList);
+    public ResponseEntity<List<QueueDataModel>> editPriorities(@Valid @RequestBody List<QueueDataModel> queueAll) {
+        return queueServiceImpl.editPrioritiesRequest(queueAll);
     }
 
     @DeleteMapping("all")
-    public ResponseEntity<Void> deleteAll() { return dequeServiceImpl.deleteDequeRequest(); }
+    public ResponseEntity<Void> deleteAll() { return queueServiceImpl.deleteQueueRequest(); }
 }

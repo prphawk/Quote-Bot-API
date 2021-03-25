@@ -1,12 +1,11 @@
-package com.maybot.quotebot.model;
+package com.maybot.quotebot.model.data;
 
 import com.maybot.quotebot.entity.Schedule;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class ScheduleModel {
+public class ScheduleDataModel {
 
     private Long id;
 
@@ -15,9 +14,9 @@ public class ScheduleModel {
     @NotNull
     private Byte hour;
 
-    public ScheduleModel() {}
+    public ScheduleDataModel() {}
 
-    public ScheduleModel(Schedule schedule) {
+    public ScheduleDataModel(Schedule schedule) {
         this.id = schedule.getId();
         this.lastPosted = schedule.getLastPosted();
         this.hour = schedule.getHour();

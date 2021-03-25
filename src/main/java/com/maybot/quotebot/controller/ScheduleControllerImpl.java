@@ -1,13 +1,12 @@
 package com.maybot.quotebot.controller;
 
-import com.maybot.quotebot.model.ScheduleModel;
+import com.maybot.quotebot.model.data.ScheduleDataModel;
 import com.maybot.quotebot.service.ScheduleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,12 +21,12 @@ public class ScheduleControllerImpl {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleModel>> get() {
+    public ResponseEntity<List<ScheduleDataModel>> get() {
         return new ResponseEntity<>(scheduleServiceImpl.getSchedule(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<List<ScheduleModel>> save(@RequestBody List<Byte> bytes) {
+    public ResponseEntity<List<ScheduleDataModel>> save(@RequestBody List<Byte> bytes) {
         return new ResponseEntity<>(scheduleServiceImpl.saveSchedule(bytes), HttpStatus.OK);
     }
 

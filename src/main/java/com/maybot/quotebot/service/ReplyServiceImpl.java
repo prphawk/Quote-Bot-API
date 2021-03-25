@@ -4,7 +4,7 @@ import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.entity.Reply;
 import com.maybot.quotebot.model.QuoteModel;
 import com.maybot.quotebot.model.ReplyModel;
-import com.maybot.quotebot.model.ReplyDataModel;
+import com.maybot.quotebot.model.data.ReplyDataModel;
 import com.maybot.quotebot.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 

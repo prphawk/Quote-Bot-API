@@ -2,7 +2,7 @@ package com.maybot.quotebot.controller;
 
 import com.maybot.quotebot.model.AllQuoteModel;
 import com.maybot.quotebot.model.QuoteModel;
-import com.maybot.quotebot.model.QuoteDataModel;
+import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
