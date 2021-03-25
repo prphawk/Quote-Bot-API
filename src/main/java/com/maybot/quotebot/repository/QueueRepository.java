@@ -22,6 +22,8 @@ public interface DequeRepository extends CrudRepository<Deque, Long>  {
     @Query("SELECT d FROM Deque d ORDER BY d.priority DESC, d.id")
     Optional<Deque> findPriorityFirst(PageRequest pageable);
 
+    List<Deque> findByPriorityFalse();
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Deque d WHERE d.id = :id")

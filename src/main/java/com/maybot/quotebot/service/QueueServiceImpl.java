@@ -93,15 +93,15 @@ public class DequeServiceImpl {
 
     public ResponseEntity<List<DequeDataModel>> shuffleDequeRequest() {
 
-        List<Deque> dequeList = (List<Deque>) dequeRepository.findAll();
+        List<Deque> dequeListNotPriority = dequeRepository.findByPriorityFalse();
 
-        if(dequeList.size() > 0) {
+        if(dequeListNotPriority.size() > 0) {
 
-            List<Quote> quotesFromDeque = dequeList.stream().map(Deque::getQuote).collect(Collectors.toList());
+            List<Quote> quotesFromDeque = dequeListNotPriority.stream().map(Deque::getQuote).collect(Collectors.toList());
 
             Collections.shuffle(quotesFromDeque);
 
-            dequeRepository.deleteAll();
+            dequeRepository.deleteAll(dequeListNotPriority);
 
             List<Deque> newDequeList = quotesFromDeque.stream().map(Deque::new).collect(Collectors.toList());
 
