@@ -48,7 +48,7 @@ public class ScheduleServiceImpl {
         if(scheduleSearch.isPresent()) {
             Schedule schedule = scheduleSearch.get();
 
-            if(schedule.getLastPosted().getHour() != now.getHour()) {
+            if(schedule.getLastPosted() == null || schedule.getLastPosted().getHour() != now.getHour()) {
                 schedule.setLastPosted(now);
                 scheduleRepository.save(schedule);
                 return true;
