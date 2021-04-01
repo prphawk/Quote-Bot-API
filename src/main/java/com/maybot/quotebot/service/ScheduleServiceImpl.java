@@ -50,7 +50,7 @@ public class ScheduleServiceImpl {
 
             if(schedule.getLastPosted() == null || schedule.getLastPosted().getDayOfWeek() != now.getDayOfWeek()) {
                 schedule.setLastPosted(now);
-                scheduleRepository.save(scheduleSearch.get());
+                scheduleRepository.save(schedule);
                 return true;
             }
         }
