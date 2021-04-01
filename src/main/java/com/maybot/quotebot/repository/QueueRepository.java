@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public interface QueueRepository extends CrudRepository<Queue, Long>  {
 
-    @Query("SELECT q FROM Queue q WHERE q.quote.invisible = FALSE ORDER BY q.priority DESC, q.id")
+    @Query("SELECT q FROM Queue q ORDER BY q.priority DESC, q.id")
     List<Queue> findAllPriorityFirst();
 
     @Query("SELECT q FROM Queue q WHERE q.quote.invisible = FALSE ORDER BY q.priority DESC, q.id")

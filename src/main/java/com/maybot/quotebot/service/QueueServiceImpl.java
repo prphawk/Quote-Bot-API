@@ -76,7 +76,7 @@ public class QueueServiceImpl {
 
     public List<Queue> makeNewQueue() {
 
-        List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
+        List<Quote> quotes = (List<Quote>) quoteRepository.findAllByInvisibleFalse();
 
         if(quotes.size() > 0) {
             Collections.shuffle(quotes);

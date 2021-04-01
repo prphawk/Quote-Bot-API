@@ -48,7 +48,8 @@ public class QuoteServiceImpl {
 
         response.setReplies(replyServiceImpl.saveReplies(model, quote));
 
-        queueRepository.save(new Queue(quote, model.isPriority()));
+        if(!model.isInvisible())
+            queueRepository.save(new Queue(quote, model.isPriority()));
 
         return response;
     }
