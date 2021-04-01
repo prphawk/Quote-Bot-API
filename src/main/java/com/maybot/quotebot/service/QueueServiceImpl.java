@@ -2,6 +2,7 @@ package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
+import com.maybot.quotebot.model.PriorityModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.repository.*;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
+import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -114,16 +117,21 @@ public class QueueServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<QueueDataModel> queueAll) {
-        queueAll.forEach(model -> {
-            queueRepository.findById(model.getId())
-                    .ifPresent(queue -> {
-                        queue.setPriority(model.isPriority());
-                        queueRepository.save(queue);
-            });
+    public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<PriorityModel> models) {
+        models.forEach(model -> {
+            Optional<Queue> search = queueRepository.findByQuoteId(model.getId());
+
+            if(search.isPresent()) {
+                Queue queue = search.get();
+                queue.setPriority(model.isPriority());
+                queueRepository.save(queue);
+            } else {
+                quoteRepository.findById(model.getId()).ifPresent(quote -> {
+                    queueRepository.save(new Queue(quote, model.isPriority()));
+                });
+            }
         });
 
         return getQueueRequest();
     }
-
 }

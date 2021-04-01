@@ -38,7 +38,7 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public QuoteDataModel save(@Valid QuoteModel model) {
+    public QuoteDataModel save(NewQuoteModel model) {
 
         Quote quote = new Quote(model);
 
@@ -53,25 +53,7 @@ public class QuoteServiceImpl {
         return response;
     }
 
-    public ResponseEntity<QuoteDataModel> saveRequest(QuoteModel model) {
-
-        QuoteDataModel response = save(model);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    public ResponseEntity<List<QuoteDataModel>> saveAllRequest(@Valid AllQuoteModel model) {
-
-        List<QuoteModel> quotes = model.getQuotes();
-
-        if(model.isShuffle()) Collections.shuffle(quotes);
-
-        List<QuoteDataModel> response = quotes.stream().map(this::save).collect(Collectors.toList());
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    public ResponseEntity<QuoteDataModel> editRequest(@Valid QuoteDataModel model) {
+    public QuoteDataModel edit(QuoteDataModel model) {
 
         Optional<Quote> quoteSearch = quoteRepository.findById(model.getId());
 
@@ -83,9 +65,33 @@ public class QuoteServiceImpl {
 
             response.setReplies(replyServiceImpl.editReplies(model.getReplies(), quote));
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return response;
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return null;
+    }
+
+    public ResponseEntity<QuoteDataModel> saveRequest(NewQuoteModel model) {
+
+        QuoteDataModel response = model.getId() == null ? save(model) : edit(model);
+
+        if(response == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<QuoteDataModel>> saveAllRequest(@Valid AllQuoteModel model) {
+
+        List<NewQuoteModel> quotes = model.getQuotes();
+
+        if(model.isShuffle()) Collections.shuffle(quotes);
+
+        List<QuoteDataModel> response = quotes.stream()
+                .map(q -> q.getId() == null ? save(q) : edit(q))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteAllRequest() {
@@ -102,9 +108,17 @@ public class QuoteServiceImpl {
 
     private QuoteDataModel saveChanges(QuoteDataModel model, Quote quote) {
 
-        quote.setText(model.getText());
+        if(model.getText() != null && !model.getText().isBlank())
+            quote.setText(model.getText());
 
-        quote.setSource(model.getSource());
+        if(model.getSource() != null && !model.getSource().isBlank())
+            quote.setSource(model.getSource());
+
+        if(model.getHideSource() != quote.getHideSource())
+            quote.setHideSource(model.getHideSource());
+
+        if(model.isInvisible() != quote.isInvisible())
+            quote.setInvisible(model.isInvisible());
 
         return new QuoteDataModel(quoteRepository.save(quote));
     }

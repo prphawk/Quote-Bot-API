@@ -1,7 +1,7 @@
 package com.maybot.quotebot.controller;
 
 import com.maybot.quotebot.model.AllQuoteModel;
-import com.maybot.quotebot.model.QuoteModel;
+import com.maybot.quotebot.model.NewQuoteModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +28,13 @@ public class QuoteControllerImpl {
     }
 
     @PostMapping
-    public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody QuoteModel model) {
+    public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody NewQuoteModel model) {
         return quoteServiceImpl.saveRequest(model);
     }
 
     @PostMapping("all")
     public ResponseEntity<List<QuoteDataModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
         return quoteServiceImpl.saveAllRequest(model);
-    }
-
-    @PutMapping
-    public ResponseEntity<QuoteDataModel> edit(@Valid @RequestBody QuoteDataModel model) {
-        return quoteServiceImpl.editRequest(model);
     }
 
     @DeleteMapping
@@ -51,6 +46,4 @@ public class QuoteControllerImpl {
     public ResponseEntity<Void> deleteAll() {
         return quoteServiceImpl.deleteAllRequest();
     }
-
-
 }
