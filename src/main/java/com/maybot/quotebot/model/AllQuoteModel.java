@@ -1,5 +1,4 @@
 package com.maybot.quotebot.model;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -10,16 +9,16 @@ public class AllQuoteModel {
 
     @NotNull
     @Valid
-    private List<QuoteModel> quotes;
+    private List<NewQuoteModel> quotes;
 
     public AllQuoteModel() {}
 
-    public AllQuoteModel(List<QuoteModel> quotes) {
+    public AllQuoteModel(List<NewQuoteModel> quotes) {
         this.shuffle = false;
         this.quotes = quotes;
     }
 
-    public AllQuoteModel(boolean shuffle, List<QuoteModel> quotes) {
+    public AllQuoteModel(boolean shuffle, List<NewQuoteModel> quotes) {
         this.shuffle = shuffle;
         this.quotes = quotes;
     }
@@ -32,11 +31,11 @@ public class AllQuoteModel {
         this.shuffle = shuffle;
     }
 
-    public List<QuoteModel> getQuotes() {
+    public List<NewQuoteModel> getQuotes() {
         return quotes;
     }
 
-    public void setQuotes(List<QuoteModel> quotes) {
+    public void setQuotes(List<NewQuoteModel> quotes) {
         this.quotes = quotes;
     }
 }

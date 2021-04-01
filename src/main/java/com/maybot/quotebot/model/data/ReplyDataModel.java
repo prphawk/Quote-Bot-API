@@ -1,11 +1,17 @@
 package com.maybot.quotebot.model.data;
 
+import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.entity.Reply;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class ReplyDataModel {
 
     private Long id;
 
+    @NotBlank(message = DataContants.REPLY_TEXT_NULL_MESSAGE)
+    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
     private String text;
 
     public ReplyDataModel() {}
