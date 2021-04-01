@@ -1,36 +1,47 @@
 package com.maybot.quotebot.model.data;
 
+import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.entity.Quote;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class QuoteDataModel {
 
-    @NotNull
     private Long id;
 
+    @NotBlank(message = DataContants.QUOTE_TEXT_EMPTY_MESSAGE)
+    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
     private String text;
 
+    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
     private String source;
 
     private boolean hideSource;
 
+    private boolean invisible;
+
+    @Valid
     private List<ReplyDataModel> replies;
 
-    public QuoteDataModel() {}
+    public QuoteDataModel() {
+        this.replies = new ArrayList<>();
+    }
 
     public QuoteDataModel(Quote quote) {
         this.id = quote.getId();
         this.text = quote.getText();
         this.source = quote.getSource();
         this.hideSource = quote.getHideSource();
-        if(quote.getReplies() != null)
-            this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
+        this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
+        this.invisible = quote.isInvisible();
     }
 
-    public boolean isHideSource() {
+    public boolean getHideSource() {
         return hideSource;
     }
 
@@ -69,4 +80,13 @@ public class QuoteDataModel {
     public void setReplies(List<ReplyDataModel> replies) {
         this.replies = replies;
     }
+
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+    }
+
 }

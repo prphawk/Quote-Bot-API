@@ -1,8 +1,10 @@
 package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
-import com.maybot.quotebot.model.QuoteModel;
+import com.maybot.quotebot.model.data.QuoteDataModel;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,18 +25,25 @@ public class Quote {
     @Column(name = "hideSource")
     private boolean hideSource;
 
+    @Column(name = "invisible")
+    private boolean invisible;
+
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
     @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Queue queue;
 
-    public Quote() {}
+    public Quote() {
+        this.replies = new ArrayList<>();
+    }
 
-    public Quote(QuoteModel model) {
+    public Quote(QuoteDataModel model) {
         this.text = model.getText();
         this.source = model.getSource();
         this.hideSource = model.getHideSource();
+        this.invisible = model.isInvisible();
+        this.replies = new ArrayList<>();
     }
 
     public Long getId() {
@@ -75,5 +84,13 @@ public class Quote {
 
     public void setHideSource(boolean hideSource) {
         this.hideSource = hideSource;
+    }
+
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
     }
 }

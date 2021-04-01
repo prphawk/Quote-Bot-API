@@ -2,8 +2,7 @@ package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.entity.Reply;
-import com.maybot.quotebot.model.QuoteModel;
-import com.maybot.quotebot.model.ReplyModel;
+import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.model.data.ReplyDataModel;
 import com.maybot.quotebot.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class ReplyServiceImpl {
         this.replyRepository = replyRepository;
     }
 
-    public List<ReplyDataModel> saveReplies(QuoteModel model, Quote quote) {
+    public List<ReplyDataModel> saveReplies(QuoteDataModel model, Quote quote) {
 
-        List<ReplyModel> replyModels = model.getReplies();
+        List<ReplyDataModel> replyModels = model.getReplies();
 
         if(replyModels != null)
             return replyModels.stream().map(replyModel ->
@@ -57,17 +56,11 @@ public class ReplyServiceImpl {
         return new ReplyDataModel(replyRepository.save(reply));
     }
 
-    private ReplyDataModel saveReply(ReplyModel model, Quote quote) {
-
-        Reply reply = new Reply(model, quote);
-
-        return new ReplyDataModel(replyRepository.save(reply));
-    }
-
     private ReplyDataModel saveReply(ReplyDataModel model, Quote quote) {
 
         Reply reply = new Reply(model, quote);
 
         return new ReplyDataModel(replyRepository.save(reply));
     }
+
 }
