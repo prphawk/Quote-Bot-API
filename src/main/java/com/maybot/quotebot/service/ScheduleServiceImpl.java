@@ -6,7 +6,6 @@ import com.maybot.quotebot.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,13 +30,10 @@ public class ScheduleServiceImpl {
 
         scheduleRepository.deleteAll();
 
-        List<ScheduleDataModel> response = new ArrayList<>();
-
-        bytes.forEach(b -> response.add(new ScheduleDataModel(scheduleRepository.save(new Schedule(b)))));
-
-        return response;
+        return bytes.stream().map(b ->
+            new ScheduleDataModel(scheduleRepository.save(new Schedule(b)))
+        ).collect(Collectors.toList());
     }
-
 
     public boolean isItTime() {
 

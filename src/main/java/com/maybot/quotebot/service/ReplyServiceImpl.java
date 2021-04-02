@@ -26,7 +26,8 @@ public class ReplyServiceImpl {
 
         if(replyModels != null)
             return replyModels.stream().map(replyModel ->
-                    saveReply(replyModel, quote)).collect(Collectors.toList());
+                    saveReply(replyModel, quote))
+                    .collect(Collectors.toList());
 
         return null;
     }

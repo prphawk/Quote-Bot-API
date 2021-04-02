@@ -3,7 +3,7 @@ package com.maybot.quotebot.service;
 import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.*;
-import com.maybot.quotebot.model.data.QuoteDataModel;
+import com.maybot.quotebot.model.data.*;
 import com.maybot.quotebot.repository.QuoteRepository;
 import com.maybot.quotebot.repository.QueueRepository;
 import org.springframework.http.HttpStatus;
@@ -109,17 +109,17 @@ public class QuoteServiceImpl {
 
     private QuoteDataModel saveChanges(QuoteDataModel model, Quote quote) {
 
-        if(model.getText() != null && !model.getText().isBlank())
-            quote.setText(model.getText());
+        quote.setText(model.getText());
 
-        if(model.getSource() != null && !model.getSource().isBlank())
-            quote.setSource(model.getSource());
+        quote.setSource(model.getSource());
 
-        if(model.getHideSource() != quote.getHideSource())
-            quote.setHideSource(model.getHideSource());
+        quote.setHideSource(model.getHideSource());
 
-        if(model.isInvisible() != quote.isInvisible())
-            quote.setInvisible(model.isInvisible());
+        quote.setInvisible(model.isInvisible());
+        if(model.isInvisible()) {
+            queueRepository.findByQuoteId(quote.getId()).ifPresent(
+                    queue -> queueRepository.deleteById(queue.getId()));
+        }
 
         return new QuoteDataModel(quoteRepository.save(quote));
     }

@@ -76,12 +76,13 @@ public class QueueServiceImpl {
 
     public List<Queue> makeNewQueue() {
 
-        List<Quote> quotes = (List<Quote>) quoteRepository.findAllByInvisibleFalse();
+        List<Quote> quotes = quoteRepository.findAllByInvisibleFalse();
 
         if(quotes.size() > 0) {
             Collections.shuffle(quotes);
 
-            List<Queue> queueList = quotes.stream().map(Queue::new).collect(Collectors.toList());
+            List<Queue> queueList = quotes.stream().filter(Quote::isVisible).map(Queue::new)
+                    .collect(Collectors.toList());
 
             return (List<Queue>) queueRepository.saveAll(queueList);
         }

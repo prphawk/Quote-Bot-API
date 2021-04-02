@@ -90,6 +90,10 @@ public class Quote {
         return invisible;
     }
 
+    public boolean isVisible() {
+        return !invisible;
+    }
+
     public void setInvisible(boolean invisible) {
         this.invisible = invisible;
     }
