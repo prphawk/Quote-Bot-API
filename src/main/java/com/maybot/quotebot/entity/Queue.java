@@ -12,6 +12,9 @@ public class Queue implements Serializable {
     @Column(name = "id", nullable = false)
     protected Long id;
 
+    @Column(name = "index")
+    private Long index;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quote_id", nullable = false)
     private Quote quote;
@@ -24,11 +27,13 @@ public class Queue implements Serializable {
     public Queue(Quote quote) {
         this.quote = quote;
         this.priority = false;
+        this.index = 0L;
     }
 
     public Queue(Quote quote, boolean priority) {
         this.quote = quote;
         this.priority = priority;
+        this.index = 0L;
     }
 
     public Long getId() {
@@ -39,6 +44,14 @@ public class Queue implements Serializable {
         this.id = id;
     }
 
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
+    }
+
     public Quote getQuote() {
         return quote;
     }
@@ -47,7 +60,7 @@ public class Queue implements Serializable {
         this.quote = quote;
     }
 
-    public boolean isPriority() {
+    public boolean getPriority() {
         return priority;
     }
 

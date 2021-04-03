@@ -1,7 +1,6 @@
 package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Queue;
-import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.PriorityModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
@@ -10,9 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.management.Query;
-import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -54,14 +50,18 @@ public class QueueServiceImpl {
 
     public QuoteDataModel popQueue() {
 
-        Optional<Queue> queueSearch = queueRepository.findPriorityFirst(PageRequest.of(0, 1));
+        Optional<Queue> queueSearch = queueRepository.pop(PageRequest.of(0, 1));
 
         if (queueSearch.isPresent()) {
             Queue queue = queueSearch.get();
 
             QuoteDataModel response = new QuoteDataModel(queue.getQuote());
 
-            queueRepository.deleteById(queue.getId());
+            queue.setPriority(false);
+
+            queue.setIndex(null);
+
+            queueRepository.save(queue);
 
             return response;
 
@@ -76,15 +76,10 @@ public class QueueServiceImpl {
 
     public List<Queue> makeNewQueue() {
 
-        List<Quote> quotes = quoteRepository.findAllByInvisibleFalse();
+        List<Queue> queue = (List<Queue>) queueRepository.findAll();
 
-        if(quotes.size() > 0) {
-            Collections.shuffle(quotes);
-
-            List<Queue> queueList = quotes.stream().filter(Quote::isVisible).map(Queue::new)
-                    .collect(Collectors.toList());
-
-            return (List<Queue>) queueRepository.saveAll(queueList);
+        if(queue.size() > 0) {
+           return shuffleQueue(queue);
         }
 
         return null;
@@ -96,24 +91,28 @@ public class QueueServiceImpl {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public List<Queue> shuffleQueue(List<Queue> queue) {
+
+        List<Long> ids = queue.stream().map(Queue::getId).collect(Collectors.toList());
+
+        Collections.shuffle(ids);
+
+        for (int i = 0; i < queue.size(); i++) {
+            queue.get(i).setIndex(ids.get(i));
+        }
+
+        return (List<Queue>) queueRepository.saveAll(queue);
+    }
+
     public ResponseEntity<List<QueueDataModel>> shuffleQueueRequest() {
 
-        List<Queue> queueNotPriority = queueRepository.findByPriorityFalse();
+        List<Queue> queueNotPosted = queueRepository.findByIndexNotNull();
 
-        if(queueNotPriority.size() > 0) {
+        if(queueNotPosted.size() > 0) {
 
-            List<Quote> quotesFromQueue = queueNotPriority.stream().map(Queue::getQuote).collect(Collectors.toList());
-
-            Collections.shuffle(quotesFromQueue);
-
-            queueRepository.deleteAll(queueNotPriority);
-
-            List<Queue> newQueueList = quotesFromQueue.stream().map(Queue::new).collect(Collectors.toList());
-
-            queueRepository.saveAll(newQueueList);
+            shuffleQueue(queueNotPosted);
 
             return getQueueRequest();
-
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

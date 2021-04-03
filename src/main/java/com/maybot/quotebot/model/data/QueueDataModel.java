@@ -14,7 +14,7 @@ public class QueueDataModel {
 
     public QueueDataModel(Queue queue) {
         this.id = queue.getId();
-        this.priority = queue.isPriority();
+        this.priority = queue.getPriority();
         if(queue.getQuote() != null) {
             this.quote = new QuoteDataModel(queue.getQuote());
         }
