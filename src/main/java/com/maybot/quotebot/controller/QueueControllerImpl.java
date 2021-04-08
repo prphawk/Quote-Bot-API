@@ -1,6 +1,6 @@
 package com.maybot.quotebot.controller;
 
-import com.maybot.quotebot.model.PriorityModel;
+import com.maybot.quotebot.model.PriorityRequestModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.service.QueueServiceImpl;
@@ -41,7 +41,7 @@ public class QueueControllerImpl {
     public ResponseEntity<List<QueueDataModel>> shuffle() { return queueServiceImpl.shuffleQueueRequest(); }
 
     @PutMapping("priority")
-    public ResponseEntity<List<QueueDataModel>> editPriorities(@Valid @RequestBody List<PriorityModel> models) {
+    public ResponseEntity<List<QueueDataModel>> editPriorities(@Valid @RequestBody List<PriorityRequestModel> models) {
         return queueServiceImpl.editPrioritiesRequest(models);
     }
 

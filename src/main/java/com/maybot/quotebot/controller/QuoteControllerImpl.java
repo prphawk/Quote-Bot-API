@@ -1,7 +1,8 @@
 package com.maybot.quotebot.controller;
 
-import com.maybot.quotebot.model.AllQuoteModel;
-import com.maybot.quotebot.model.NewQuoteModel;
+import com.maybot.quotebot.model.AllQuoteRequestModel;
+import com.maybot.quotebot.model.QuoteRequestModel;
+import com.maybot.quotebot.model.SourceRequestModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,17 @@ public class QuoteControllerImpl {
     }
 
     @GetMapping("source")
-    public ResponseEntity<String> getSourceRequest(@Valid @RequestBody String text) {
-        return quoteServiceImpl.getSourceRequest(text);
+    public ResponseEntity<String> getSourceRequest(@Valid @RequestBody SourceRequestModel model) {
+        return quoteServiceImpl.getSourceRequest(model);
     }
 
     @PostMapping
-    public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody NewQuoteModel model) {
+    public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody QuoteRequestModel model) {
         return quoteServiceImpl.saveRequest(model);
     }
 
     @PostMapping("all")
-    public ResponseEntity<List<QuoteDataModel>> saveAll(@Valid @RequestBody AllQuoteModel model) {
+    public ResponseEntity<List<QuoteDataModel>> saveAll(@Valid @RequestBody AllQuoteRequestModel model) {
         return quoteServiceImpl.saveAllRequest(model);
     }
 

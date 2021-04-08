@@ -38,7 +38,7 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public QuoteDataModel save(NewQuoteModel model) {
+    public QuoteDataModel save(QuoteRequestModel model) {
 
         Quote quote = new Quote(model);
 
@@ -72,7 +72,7 @@ public class QuoteServiceImpl {
         return null;
     }
 
-    public ResponseEntity<QuoteDataModel> saveRequest(NewQuoteModel model) {
+    public ResponseEntity<QuoteDataModel> saveRequest(QuoteRequestModel model) {
 
         QuoteDataModel response = model.getId() == null ? save(model) : edit(model);
 
@@ -82,9 +82,9 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<List<QuoteDataModel>> saveAllRequest(@Valid AllQuoteModel model) {
+    public ResponseEntity<List<QuoteDataModel>> saveAllRequest(@Valid AllQuoteRequestModel model) {
 
-        List<NewQuoteModel> quotes = model.getQuotes();
+        List<QuoteRequestModel> quotes = model.getQuotes();
 
         if(model.isShuffle()) Collections.shuffle(quotes);
 
@@ -124,9 +124,9 @@ public class QuoteServiceImpl {
         return new QuoteDataModel(quoteRepository.save(quote));
     }
 
-    public ResponseEntity<String> getSourceRequest(String text) {
+    public ResponseEntity<String> getSourceRequest(SourceRequestModel model) {
 
-        Optional<Quote> quoteSearch = quoteRepository.findByText(text);
+        Optional<Quote> quoteSearch = quoteRepository.findByText(model.getText());
 
         if(quoteSearch.isPresent()) {
             String response = quoteSearch.get().getSource();

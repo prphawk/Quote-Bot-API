@@ -1,7 +1,7 @@
 package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Queue;
-import com.maybot.quotebot.model.PriorityModel;
+import com.maybot.quotebot.model.PriorityRequestModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.repository.*;
@@ -117,7 +117,7 @@ public class QueueServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<PriorityModel> models) {
+    public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<PriorityRequestModel> models) {
         models.forEach(model -> {
             Optional<Queue> search = queueRepository.findByQuoteId(model.getId());
 
