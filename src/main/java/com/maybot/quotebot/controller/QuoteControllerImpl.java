@@ -27,6 +27,11 @@ public class QuoteControllerImpl {
         return quoteServiceImpl.getAllRequest();
     }
 
+    @GetMapping("source")
+    public ResponseEntity<String> getSourceRequest(@Valid @RequestBody String text) {
+        return quoteServiceImpl.getSourceRequest(text);
+    }
+
     @PostMapping
     public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody NewQuoteModel model) {
         return quoteServiceImpl.saveRequest(model);

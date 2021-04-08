@@ -123,4 +123,17 @@ public class QuoteServiceImpl {
 
         return new QuoteDataModel(quoteRepository.save(quote));
     }
+
+    public ResponseEntity<String> getSourceRequest(String text) {
+
+        Optional<Quote> quoteSearch = quoteRepository.findByText(text);
+
+        if(quoteSearch.isPresent()) {
+            String response = quoteSearch.get().getSource();
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

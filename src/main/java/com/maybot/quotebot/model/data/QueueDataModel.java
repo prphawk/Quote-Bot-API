@@ -6,6 +6,8 @@ public class QueueDataModel {
 
     protected Long id;
 
+    protected Long index;
+
     private boolean priority;
 
     private QuoteDataModel quote;
@@ -15,6 +17,7 @@ public class QueueDataModel {
     public QueueDataModel(Queue queue) {
         this.id = queue.getId();
         this.priority = queue.getPriority();
+        this.index = queue.getIndex();
         if(queue.getQuote() != null) {
             this.quote = new QuoteDataModel(queue.getQuote());
         }
