@@ -1,14 +1,14 @@
 package com.maybot.quotebot.model;
 
-public class PriorityModel {
+public class PriorityRequestModel {
 
     private Long id;
 
     private boolean priority;
 
-    public PriorityModel() {}
+    public PriorityRequestModel() {}
 
-    public PriorityModel(Long id, boolean priority) {
+    public PriorityRequestModel(Long id, boolean priority) {
         this.id = id;
         this.priority = priority;
     }

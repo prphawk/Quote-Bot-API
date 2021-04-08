@@ -3,22 +3,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class AllQuoteModel {
+public class AllQuoteRequestModel {
 
     private boolean shuffle;
 
     @NotNull
     @Valid
-    private List<NewQuoteModel> quotes;
+    private List<QuoteRequestModel> quotes;
 
-    public AllQuoteModel() {}
+    public AllQuoteRequestModel() {}
 
-    public AllQuoteModel(List<NewQuoteModel> quotes) {
+    public AllQuoteRequestModel(List<QuoteRequestModel> quotes) {
         this.shuffle = false;
         this.quotes = quotes;
     }
 
-    public AllQuoteModel(boolean shuffle, List<NewQuoteModel> quotes) {
+    public AllQuoteRequestModel(boolean shuffle, List<QuoteRequestModel> quotes) {
         this.shuffle = shuffle;
         this.quotes = quotes;
     }
@@ -31,11 +31,11 @@ public class AllQuoteModel {
         this.shuffle = shuffle;
     }
 
-    public List<NewQuoteModel> getQuotes() {
+    public List<QuoteRequestModel> getQuotes() {
         return quotes;
     }
 
-    public void setQuotes(List<NewQuoteModel> quotes) {
+    public void setQuotes(List<QuoteRequestModel> quotes) {
         this.quotes = quotes;
     }
 }
