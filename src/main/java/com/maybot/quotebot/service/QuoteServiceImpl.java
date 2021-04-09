@@ -126,7 +126,7 @@ public class QuoteServiceImpl {
 
     public ResponseEntity<String> getSourceRequest(SourceRequestModel model) {
 
-        Optional<Quote> quoteSearch = quoteRepository.findByText(model.getText());
+        Optional<Quote> quoteSearch = quoteRepository.findByTextStartsWith(model.getText());
 
         if(quoteSearch.isPresent()) {
             String response = quoteSearch.get().getSource();

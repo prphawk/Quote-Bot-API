@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface QuoteRepository extends CrudRepository<Quote, Long> {
 
-    Optional<Quote> findByText(String text);
+    Optional<Quote> findByTextStartsWith(String text);
 }
