@@ -113,7 +113,7 @@ public class QuoteServiceImpl {
 
         quote.setSource(model.getSource());
 
-        quote.setHideSource(model.getHideSource());
+        quote.setShowSource(model.getShowSource());
 
         quote.setInvisible(model.isInvisible());
         if(model.isInvisible()) {

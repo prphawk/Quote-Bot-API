@@ -21,7 +21,7 @@ public class QuoteDataModel {
     @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
     private String source;
 
-    private boolean hideSource;
+    private boolean showSource;
 
     private boolean invisible;
 
@@ -36,17 +36,17 @@ public class QuoteDataModel {
         this.id = quote.getId();
         this.text = quote.getText();
         this.source = quote.getSource();
-        this.hideSource = quote.getHideSource();
+        this.showSource = quote.getShowSource();
         this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
         this.invisible = quote.isInvisible();
     }
 
-    public boolean getHideSource() {
-        return hideSource;
+    public boolean getShowSource() {
+        return showSource;
     }
 
-    public void setHideSource(boolean hideSource) {
-        this.hideSource = hideSource;
+    public void setShowSource(boolean showSource) {
+        this.showSource = showSource;
     }
 
     public Long getId() {

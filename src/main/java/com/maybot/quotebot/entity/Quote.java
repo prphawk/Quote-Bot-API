@@ -22,8 +22,8 @@ public class Quote {
     @Column(name = "source", length = DataContants.QUOTE_TEXT_MAX)
     private String source;
 
-    @Column(name = "hideSource")
-    private boolean hideSource;
+    @Column(name = "showSource")
+    private boolean showSource;
 
     @Column(name = "invisible")
     private boolean invisible;
@@ -41,7 +41,7 @@ public class Quote {
     public Quote(QuoteDataModel model) {
         this.text = model.getText();
         this.source = model.getSource();
-        this.hideSource = model.getHideSource();
+        this.showSource = model.getShowSource();
         this.invisible = model.isInvisible();
         this.replies = new ArrayList<>();
     }
@@ -78,12 +78,12 @@ public class Quote {
         this.replies = replies;
     }
 
-    public boolean getHideSource() {
-        return hideSource;
+    public boolean getShowSource() {
+        return showSource;
     }
 
-    public void setHideSource(boolean hideSource) {
-        this.hideSource = hideSource;
+    public void setShowSource(boolean showSource) {
+        this.showSource = showSource;
     }
 
     public boolean isInvisible() {
