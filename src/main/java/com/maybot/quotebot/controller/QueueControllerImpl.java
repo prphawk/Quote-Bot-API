@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.maybot.quotebot.constant.PathConstants.*;
+
 @RestController
-@RequestMapping("/queue/")
 public class QueueControllerImpl {
 
     private final QueueServiceImpl queueServiceImpl;
@@ -22,29 +23,29 @@ public class QueueControllerImpl {
         this.queueServiceImpl = queueServiceImpl;
     }
 
-    @GetMapping
+    @GetMapping(QUEUE)
     public ResponseEntity<List<QueueDataModel>> get() {
         return queueServiceImpl.getQueueRequest();
     }
 
-    @PutMapping
+    @PutMapping(QUEUE)
     public ResponseEntity<QuoteDataModel> popQueue() {
         return queueServiceImpl.popQueueRequest(false);
     }
 
-    @PutMapping("force-pop")
+    @PutMapping(QUEUE_FORCE_POP)
     public ResponseEntity<QuoteDataModel> forcePopQueue() {
         return queueServiceImpl.popQueueRequest(true);
     }
 
-    @PutMapping("shuffle")
+    @PutMapping(QUEUE_SHUFFLE)
     public ResponseEntity<List<QueueDataModel>> shuffle() { return queueServiceImpl.shuffleQueueRequest(); }
 
-    @PutMapping("priority")
+    @PutMapping(QUEUE_PRIORITY)
     public ResponseEntity<List<QueueDataModel>> editPriorities(@Valid @RequestBody List<PriorityRequestModel> models) {
         return queueServiceImpl.editPrioritiesRequest(models);
     }
 
-    @DeleteMapping("all")
+    @DeleteMapping(QUEUE_ALL)
     public ResponseEntity<Void> deleteAll() { return queueServiceImpl.deleteQueueRequest(); }
 }

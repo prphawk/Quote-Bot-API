@@ -2,12 +2,9 @@ package com.maybot.quotebot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maybot.quotebot.QuotebotApplication;
-import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.AllQuoteRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
-import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.model.data.ReplyDataModel;
-import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
