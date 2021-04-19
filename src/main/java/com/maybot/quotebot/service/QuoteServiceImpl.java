@@ -115,6 +115,8 @@ public class QuoteServiceImpl {
 
         quote.setShowSource(model.getShowSource());
 
+        quote.setTags(model.getTags());
+
         quote.setInvisible(model.isInvisible());
         if(model.isInvisible()) {
             queueRepository.findByQuoteId(quote.getId()).ifPresent(

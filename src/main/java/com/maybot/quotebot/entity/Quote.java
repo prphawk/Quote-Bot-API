@@ -31,11 +31,16 @@ public class Quote {
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
+    @ElementCollection
+    @CollectionTable(name = "tags")
+    private List<String> tags;
+
     @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Queue queue;
 
     public Quote() {
         this.replies = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     public Quote(QuoteDataModel model) {
@@ -43,7 +48,16 @@ public class Quote {
         this.source = model.getSource();
         this.showSource = model.getShowSource();
         this.invisible = model.isInvisible();
+        this.tags = model.getTags();
         this.replies = new ArrayList<>();
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public Long getId() {

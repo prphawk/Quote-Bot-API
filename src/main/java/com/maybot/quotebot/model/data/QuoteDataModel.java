@@ -25,11 +25,14 @@ public class QuoteDataModel {
 
     private boolean invisible;
 
+    private List<String> tags;
+
     @Valid
     private List<ReplyDataModel> replies;
 
     public QuoteDataModel() {
         this.replies = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     public QuoteDataModel(@NotBlank(message = DataContants.QUOTE_TEXT_EMPTY_MESSAGE) @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text, @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE) String source, boolean showSource, boolean invisible, @Valid List<ReplyDataModel> replies) {
@@ -47,6 +50,7 @@ public class QuoteDataModel {
         this.showSource = quote.getShowSource();
         this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
         this.invisible = quote.isInvisible();
+        this.tags = quote.getTags();
     }
 
     public boolean getShowSource() {
@@ -63,6 +67,14 @@ public class QuoteDataModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public String getText() {
