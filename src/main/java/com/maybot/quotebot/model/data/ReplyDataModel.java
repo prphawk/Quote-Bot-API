@@ -16,6 +16,10 @@ public class ReplyDataModel {
 
     public ReplyDataModel() {}
 
+    public ReplyDataModel(@NotBlank(message = DataContants.REPLY_TEXT_NULL_MESSAGE) @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text) {
+        this.text = text;
+    }
+
     public ReplyDataModel(Reply reply) {
         this.id = reply.getId();
         this.text = reply.getText();

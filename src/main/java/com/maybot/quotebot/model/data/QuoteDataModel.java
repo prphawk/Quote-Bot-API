@@ -32,6 +32,14 @@ public class QuoteDataModel {
         this.replies = new ArrayList<>();
     }
 
+    public QuoteDataModel(@NotBlank(message = DataContants.QUOTE_TEXT_EMPTY_MESSAGE) @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE) String text, @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE) String source, boolean showSource, boolean invisible, @Valid List<ReplyDataModel> replies) {
+        this.text = text;
+        this.source = source;
+        this.showSource = showSource;
+        this.invisible = invisible;
+        this.replies = replies;
+    }
+
     public QuoteDataModel(Quote quote) {
         this.id = quote.getId();
         this.text = quote.getText();

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -40,7 +41,7 @@ public class MethodArgumentNotValidExceptionHandler {
             this.status = status.value();
             this.message = message;
             this.fieldErrors = fieldErrors.stream().map(fieldError ->
-                new ErrorItem(fieldError.getField(), fieldError.getDefaultMessage())
+                new ErrorItem(fieldError.getField(), fieldError.getDefaultMessage(), Objects.requireNonNull(fieldError.getRejectedValue()).toString())
             ).collect(Collectors.toList());
         }
 
@@ -60,10 +61,17 @@ public class MethodArgumentNotValidExceptionHandler {
     static class ErrorItem {
         private String field;
         private String message;
+        private String value;
 
         ErrorItem(String field, String message) {
             this.field = field;
             this.message = message;
+        }
+
+        ErrorItem(String field, String message, String value) {
+            this.field = field;
+            this.message = message;
+            this.value = value;
         }
 
         public String getField() {
@@ -72,6 +80,14 @@ public class MethodArgumentNotValidExceptionHandler {
 
         public String getMessage() {
             return message;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 }

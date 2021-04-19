@@ -1,9 +1,12 @@
 package com.maybot.quotebot;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations="classpath:test.properties")
 class QuotebotApplicationTests {
 
 	@Test
