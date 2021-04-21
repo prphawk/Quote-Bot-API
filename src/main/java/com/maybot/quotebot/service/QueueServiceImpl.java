@@ -30,7 +30,7 @@ public class QueueServiceImpl {
 
     public ResponseEntity<List<QueueDataModel>> getQueueRequest() {
 
-        List<Queue> queue = queueRepository.findAllPriorityFirst();
+        List<Queue> queue = queueRepository.getQueue();
 
         List<QueueDataModel> response = queue.stream().map(QueueDataModel::new).collect(Collectors.toList());
 
@@ -41,8 +41,7 @@ public class QueueServiceImpl {
 
         if(scheduleServiceImpl.isItTime() || forcePop) {
             QuoteDataModel response = popQueue();
-            if(response != null)
-                return new ResponseEntity<>(response, HttpStatus.OK);
+            if(response != null) return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -78,9 +77,7 @@ public class QueueServiceImpl {
 
         List<Queue> queue = (List<Queue>) queueRepository.findAll();
 
-        if(queue.size() > 0) {
-           return shuffleQueue(queue);
-        }
+        if(queue.size() > 0) return shuffleQueue(queue);
 
         return null;
     }
@@ -118,18 +115,21 @@ public class QueueServiceImpl {
     }
 
     public ResponseEntity<List<QueueDataModel>> editPrioritiesRequest(List<PriorityRequestModel> models) {
+
         models.forEach(model -> {
+
             Optional<Queue> search = queueRepository.findByQuoteId(model.getId());
 
             if(search.isPresent()) {
+
                 Queue queue = search.get();
+
                 queue.setPriority(model.isPriority());
+
                 queueRepository.save(queue);
-            } else {
-                quoteRepository.findById(model.getId()).ifPresent(quote -> {
-                    queueRepository.save(new Queue(quote, model.isPriority()));
-                });
-            }
+
+            } else quoteRepository.findById(model.getId()).ifPresent(
+                    quote -> queueRepository.save(new Queue(quote, model.isPriority())));
         });
 
         return getQueueRequest();

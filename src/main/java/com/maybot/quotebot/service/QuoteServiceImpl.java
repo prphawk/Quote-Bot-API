@@ -138,4 +138,17 @@ public class QuoteServiceImpl {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    public ResponseEntity<?> findByTagRequest(String tag) {
+
+        List<Quote> quoteSearch = quoteRepository.findByTag(tag);
+
+        if(quoteSearch.size() > 0) {
+            List<QuoteDataModel> response = quoteSearch.stream().map(QuoteDataModel::new).collect(Collectors.toList());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

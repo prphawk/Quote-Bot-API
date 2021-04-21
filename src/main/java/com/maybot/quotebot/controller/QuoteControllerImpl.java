@@ -33,6 +33,11 @@ public class QuoteControllerImpl {
         return quoteServiceImpl.getSourceRequest(model);
     }
 
+    @GetMapping("tag")
+    public ResponseEntity<?> findByTagRequest(@Valid @RequestBody String tag) {
+        return quoteServiceImpl.findByTagRequest(tag);
+    }
+
     @PostMapping
     public ResponseEntity<QuoteDataModel> save(@Valid @RequestBody QuoteRequestModel model) {
         return quoteServiceImpl.saveRequest(model);
