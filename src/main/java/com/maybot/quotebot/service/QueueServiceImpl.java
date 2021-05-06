@@ -153,4 +153,17 @@ public class QueueServiceImpl {
     }
 
     public Queue save(Queue queue) { return queueRepository.save(queue); }
+
+    public ResponseEntity<List<QueueDataModel>> restoreQueue(List<QuoteDataModel> postedModels) {
+
+        postedModels.forEach(posted ->
+            queueRepository.findByQuoteText(posted.getText())
+                    .ifPresent(queue -> {
+                        queue.setIndex(null);
+                        queueRepository.save(queue);
+                    })
+        );
+
+        return getQueueRequest();
+    }
 }

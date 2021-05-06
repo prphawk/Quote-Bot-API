@@ -159,5 +159,4 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //public Quote save(Quote quote) { return quoteRepository.save(quote); }
 }

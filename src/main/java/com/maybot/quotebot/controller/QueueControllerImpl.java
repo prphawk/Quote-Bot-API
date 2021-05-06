@@ -51,6 +51,11 @@ public class QueueControllerImpl {
         return queueServiceImpl.editPrioritiesRequest(models);
     }
 
+    @PutMapping
+    public ResponseEntity<List<QueueDataModel>> restoreQueue(@Valid @RequestBody List<QuoteDataModel> postedModels) {
+        return queueServiceImpl.restoreQueue(postedModels);
+    }
+
     @DeleteMapping(QUEUE_ALL)
     public ResponseEntity<Void> deleteAll() { return queueServiceImpl.deleteQueueRequest(); }
 }

@@ -25,6 +25,9 @@ public interface QueueRepository extends CrudRepository<Queue, Long>  {
     @Query("SELECT q FROM Queue q WHERE q.quote.id = :id")
     Optional<Queue> findByQuoteId(@NotNull @Param("id") Long id);
 
+    @Query("SELECT q FROM Queue q WHERE q.quote.text = :text")
+    Optional<Queue> findByQuoteText(@NotNull @Param("text") String text);
+
     List<Queue> findByIndexNotNull();
 
     List<Queue> findByIndexNull();
