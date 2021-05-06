@@ -28,6 +28,11 @@ public class QueueControllerImpl {
         return queueServiceImpl.getQueueRequest();
     }
 
+    @GetMapping(QUEUE_POSTED)
+    public ResponseEntity<List<QueueDataModel>> getPosted() {
+        return queueServiceImpl.getAllPostedRequest();
+    }
+
     @PutMapping(QUEUE)
     public ResponseEntity<QuoteDataModel> popQueue() {
         return queueServiceImpl.popQueueRequest(false);

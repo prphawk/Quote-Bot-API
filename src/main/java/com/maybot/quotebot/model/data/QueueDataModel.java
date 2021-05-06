@@ -46,4 +46,12 @@ public class QueueDataModel {
     public void setPriority(boolean priority) {
         this.priority = priority;
     }
+
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
+    }
 }

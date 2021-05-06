@@ -134,4 +134,23 @@ public class QueueServiceImpl {
 
         return getQueueRequest();
     }
+
+    public List<QueueDataModel> getAllPosted() {
+        List<Queue> queuePosted = queueRepository.findByIndexNull();
+
+        return queuePosted.stream().map(QueueDataModel::new).collect(Collectors.toList());
+    }
+
+    public ResponseEntity<List<QueueDataModel>> getAllPostedRequest() {
+        List<QueueDataModel> response = getAllPosted();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public void deleteByQuoteId(Long id) {
+        queueRepository.findByQuoteId(id).ifPresent(
+                queue -> queueRepository.deleteById(queue.getId()));
+    }
+
+    public Queue save(Queue queue) { return queueRepository.save(queue); }
 }

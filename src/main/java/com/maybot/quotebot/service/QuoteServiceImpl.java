@@ -5,7 +5,6 @@ import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.*;
 import com.maybot.quotebot.model.data.*;
 import com.maybot.quotebot.repository.QuoteRepository;
-import com.maybot.quotebot.repository.QueueRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,13 +19,13 @@ import java.util.stream.Collectors;
 public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
-    private final QueueRepository queueRepository;
-    private final ReplyServiceImpl replyServiceImpl;
+    private final QueueServiceImpl queueService;
+    private final ReplyServiceImpl replyService;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueRepository queueRepository, ReplyServiceImpl replyServiceImpl) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ReplyServiceImpl replyServiceImpl) {
         this.quoteRepository = quoteRepository;
-        this.queueRepository = queueRepository;
-        this.replyServiceImpl = replyServiceImpl;
+        this.queueService = queueService;
+        this.replyService = replyServiceImpl;
     }
 
     public ResponseEntity<List<QuoteDataModel>> getAllRequest() {
@@ -34,6 +33,15 @@ public class QuoteServiceImpl {
         List<Quote> quotes = (List<Quote>) quoteRepository.findAll();
 
         List<QuoteDataModel> response = quotes.stream().map(QuoteDataModel::new).collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<QuoteDataModel>> getAllPostedRequest() {
+
+        List<QueueDataModel> queueDataModels = queueService.getAllPosted();
+
+        List<QuoteDataModel> response = queueDataModels.stream().map(QueueDataModel::getQuote).collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -46,10 +54,10 @@ public class QuoteServiceImpl {
 
         QuoteDataModel response = new QuoteDataModel(quote);
 
-        response.setReplies(replyServiceImpl.saveReplies(model, quote));
+        response.setReplies(replyService.saveReplies(model, quote));
 
         if(!model.isInvisible())
-            queueRepository.save(new Queue(quote, model.isPriority()));
+            queueService.save(new Queue(quote, model.isPriority()));
 
         return response;
     }
@@ -64,7 +72,7 @@ public class QuoteServiceImpl {
 
             QuoteDataModel response = saveChanges(model, quote);
 
-            response.setReplies(replyServiceImpl.editReplies(model.getReplies(), quote));
+            response.setReplies(replyService.editReplies(model.getReplies(), quote));
 
             return response;
         }
@@ -119,8 +127,7 @@ public class QuoteServiceImpl {
 
         quote.setInvisible(model.isInvisible());
         if(model.isInvisible()) {
-            queueRepository.findByQuoteId(quote.getId()).ifPresent(
-                    queue -> queueRepository.deleteById(queue.getId()));
+            queueService.deleteByQuoteId(model.getId());
         }
 
         return new QuoteDataModel(quoteRepository.save(quote));
@@ -151,4 +158,6 @@ public class QuoteServiceImpl {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    //public Quote save(Quote quote) { return quoteRepository.save(quote); }
 }

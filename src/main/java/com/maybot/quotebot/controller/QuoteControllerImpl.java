@@ -28,6 +28,11 @@ public class QuoteControllerImpl {
         return quoteServiceImpl.getAllRequest();
     }
 
+    @GetMapping("all/posted")
+    public ResponseEntity<List<QuoteDataModel>> getAllPosted() {
+        return quoteServiceImpl.getAllPostedRequest();
+    }
+
     @GetMapping("source")
     public ResponseEntity<String> getSourceRequest(@Valid @RequestBody SourceRequestModel model) {
         return quoteServiceImpl.getSourceRequest(model);

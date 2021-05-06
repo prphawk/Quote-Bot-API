@@ -27,6 +27,8 @@ public interface QueueRepository extends CrudRepository<Queue, Long>  {
 
     List<Queue> findByIndexNotNull();
 
+    List<Queue> findByIndexNull();
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Queue q WHERE q.id = :id")
