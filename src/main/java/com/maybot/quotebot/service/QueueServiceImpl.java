@@ -2,6 +2,7 @@ package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.model.PriorityRequestModel;
+import com.maybot.quotebot.model.QuoteRequestModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.repository.*;
@@ -154,7 +155,7 @@ public class QueueServiceImpl {
 
     public Queue save(Queue queue) { return queueRepository.save(queue); }
 
-    public ResponseEntity<List<QueueDataModel>> restoreQueue(List<QuoteDataModel> postedModels) {
+    public ResponseEntity<List<QueueDataModel>> restoreQueue(List<QuoteRequestModel> postedModels) {
 
         postedModels.forEach(posted ->
             queueRepository.findByQuoteText(posted.getText())
