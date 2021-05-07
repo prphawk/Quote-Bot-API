@@ -20,16 +20,16 @@ public class ReplyServiceImpl {
         this.replyRepository = replyRepository;
     }
 
-    public List<ReplyDataModel> saveReplies(QuoteDataModel model, Quote quote) {
+    public ReplyDataModel saveReply(ReplyDataModel model, Quote quote) {
 
-        List<ReplyDataModel> replyModels = model.getReplies();
+        Reply reply = new Reply(model, quote);
 
-        if(replyModels != null)
-            return replyModels.stream().map(replyModel ->
-                    saveReply(replyModel, quote))
-                    .collect(Collectors.toList());
+        return new ReplyDataModel(replyRepository.save(reply));
+    }
 
-        return null;
+    public List<ReplyDataModel> saveReplies(List<ReplyDataModel> models, Quote quote) {
+
+        return  models.stream().map(replyDataModel -> saveReply(replyDataModel, quote)).collect(Collectors.toList());
     }
 
     public List<ReplyDataModel> editReplies(List<ReplyDataModel> models, Quote quote) {
@@ -53,13 +53,6 @@ public class ReplyServiceImpl {
         reply.setText(model.getText());
 
         reply.setQuote(quote);
-
-        return new ReplyDataModel(replyRepository.save(reply));
-    }
-
-    private ReplyDataModel saveReply(ReplyDataModel model, Quote quote) {
-
-        Reply reply = new Reply(model, quote);
 
         return new ReplyDataModel(replyRepository.save(reply));
     }

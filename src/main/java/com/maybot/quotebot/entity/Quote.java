@@ -31,6 +31,9 @@ public class Quote {
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies;
 
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images;
+
     @ElementCollection
     @CollectionTable(name = "tags")
     private List<String> tags;
@@ -41,6 +44,7 @@ public class Quote {
     public Quote() {
         this.replies = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
     public Quote(QuoteDataModel model) {
@@ -50,6 +54,7 @@ public class Quote {
         this.invisible = model.isInvisible();
         this.tags = model.getTags();
         this.replies = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
     public List<String> getTags() {
@@ -110,5 +115,13 @@ public class Quote {
 
     public void setInvisible(boolean invisible) {
         this.invisible = invisible;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 }

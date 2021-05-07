@@ -1,5 +1,6 @@
 package com.maybot.quotebot.service;
 
+import com.maybot.quotebot.entity.Image;
 import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.*;
@@ -21,11 +22,13 @@ public class QuoteServiceImpl {
     private final QuoteRepository quoteRepository;
     private final QueueServiceImpl queueService;
     private final ReplyServiceImpl replyService;
+    private final ImageServiceImpl imageService;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ReplyServiceImpl replyServiceImpl) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ReplyServiceImpl replyServiceImpl, ImageServiceImpl imageService) {
         this.quoteRepository = quoteRepository;
         this.queueService = queueService;
         this.replyService = replyServiceImpl;
+        this.imageService = imageService;
     }
 
     public ResponseEntity<List<QuoteDataModel>> getAllRequest() {
@@ -54,7 +57,9 @@ public class QuoteServiceImpl {
 
         QuoteDataModel response = new QuoteDataModel(quote);
 
-        response.setReplies(replyService.saveReplies(model, quote));
+        response.setReplies(replyService.saveReplies(model.getReplies(), quote));
+
+        response.setImages(imageService.saveAll(model.getImages(), quote));
 
         if(!model.isInvisible())
             queueService.save(new Queue(quote, model.isPriority()));

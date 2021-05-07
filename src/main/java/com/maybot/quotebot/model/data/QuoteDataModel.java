@@ -30,17 +30,22 @@ public class QuoteDataModel {
     @Valid
     private List<ReplyDataModel> replies;
 
+    @Valid
+    private List<ImageDataModel> images;
+
     public QuoteDataModel() {
         this.replies = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
-    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<ReplyDataModel> replies) {
+    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<ReplyDataModel> replies, List<ImageDataModel> images) {
         this.text = text;
         this.source = source;
         this.showSource = showSource;
         this.invisible = invisible;
         this.replies = replies;
+        this.images = images;
     }
 
     public QuoteDataModel(Quote quote) {
@@ -48,9 +53,10 @@ public class QuoteDataModel {
         this.text = quote.getText();
         this.source = quote.getSource();
         this.showSource = quote.getShowSource();
-        this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
         this.invisible = quote.isInvisible();
         this.tags = quote.getTags();
+        this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
+        this.images = quote.getImages().stream().map(ImageDataModel::new).collect(Collectors.toList());
     }
 
     public boolean getShowSource() {
@@ -109,4 +115,11 @@ public class QuoteDataModel {
         this.invisible = invisible;
     }
 
+    public List<ImageDataModel> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageDataModel> images) {
+        this.images = images;
+    }
 }
