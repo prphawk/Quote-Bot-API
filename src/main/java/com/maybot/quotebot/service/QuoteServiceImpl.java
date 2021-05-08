@@ -1,7 +1,5 @@
 package com.maybot.quotebot.service;
 
-import com.maybot.quotebot.entity.Image;
-import com.maybot.quotebot.entity.Queue;
 import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.*;
 import com.maybot.quotebot.model.data.*;
@@ -62,7 +60,7 @@ public class QuoteServiceImpl {
         response.setImages(imageService.saveAll(model.getImages(), quote));
 
         if(!model.isInvisible())
-            queueService.save(new Queue(quote, model.isPriority()));
+            queueService.push(quote, model.isPriority());
 
         return response;
     }
@@ -131,6 +129,7 @@ public class QuoteServiceImpl {
         quote.setTags(model.getTags());
 
         quote.setInvisible(model.isInvisible());
+
         if(model.isInvisible()) {
             queueService.deleteByQuoteId(model.getId());
         }
