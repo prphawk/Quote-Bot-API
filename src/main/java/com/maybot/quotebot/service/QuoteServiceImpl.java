@@ -20,12 +20,10 @@ public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final QueueServiceImpl queueService;
-    private final ReplyServiceImpl replyService;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ReplyServiceImpl replyServiceImpl) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService) {
         this.quoteRepository = quoteRepository;
         this.queueService = queueService;
-        this.replyService = replyServiceImpl;
     }
 
     public ResponseEntity<List<QuoteDataModel>> getAllRequest() {
@@ -54,8 +52,6 @@ public class QuoteServiceImpl {
 
         QuoteDataModel response = new QuoteDataModel(quote);
 
-        response.setReplies(replyService.saveReplies(model, quote));
-
         if(!model.isInvisible())
             queueService.save(new Queue(quote, model.isPriority()));
 
@@ -71,8 +67,6 @@ public class QuoteServiceImpl {
             Quote quote = quoteSearch.get();
 
             QuoteDataModel response = saveChanges(model, quote);
-
-            response.setReplies(replyService.editReplies(model.getReplies(), quote));
 
             return response;
         }
@@ -122,6 +116,8 @@ public class QuoteServiceImpl {
         quote.setSource(model.getSource());
 
         quote.setShowSource(model.getShowSource());
+
+        quote.setReplies(model.getReplies());
 
         quote.setTags(model.getTags());
 
