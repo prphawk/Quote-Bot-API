@@ -2,9 +2,9 @@ package com.maybot.quotebot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maybot.quotebot.QuotebotApplication;
+import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.AllQuoteRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
-import com.maybot.quotebot.model.data.ReplyDataModel;
 import com.maybot.quotebot.service.QueueServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.maybot.quotebot.constant.PathConstants.QUEUE;
 import static com.maybot.quotebot.constant.PathConstants.QUEUE_FORCE_POP;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -60,7 +59,8 @@ public class QuoteControllerIntegrationTest {
     @Test
     public void givenQuoteRequestModel_whenPostQuote_thenStatus200() throws Exception {
 
-        List<ReplyDataModel> mockReplies = Collections.singletonList(new ReplyDataModel("Mock Reply"));
+        List<String> mockReplies = Arrays.asList("Mock Reply", "Mock Reply 2");
+
         QuoteRequestModel mockModel = new QuoteRequestModel(
                 "Mock text", "Mock source", true, false, mockReplies, true);
 
@@ -78,15 +78,59 @@ public class QuoteControllerIntegrationTest {
                 .andExpect(jsonPath("$.showSource").value(true))
                 .andExpect(jsonPath("$.invisible").value(false))
                 .andExpect(jsonPath("$.replies").exists())
-                .andExpect(jsonPath("$.replies[*].id").isNotEmpty())
-                .andExpect(jsonPath("$.replies[*].text").value("Mock Reply"));
+                .andExpect(jsonPath("$.replies[*]").isNotEmpty())
+                .andExpect(jsonPath("$.replies[0]").value("Mock Reply"))
+                .andExpect(jsonPath("$.replies[1]").value("Mock Reply 2"));
+    }
+
+    @Test
+    public void givenQuoteRequestModel_whenPostQuote_andValidateLength_thenStatus200() throws Exception {
+
+        List<String> mockReplies = Collections.singletonList("R".repeat(DataContants.TWEET_MAX));
+
+        QuoteRequestModel mockModel = new QuoteRequestModel(
+                "T".repeat(DataContants.TWEET_MAX), "S".repeat(DataContants.TWEET_MAX), true, false, mockReplies, true);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post("/quote/")
+                .content(new ObjectMapper().writeValueAsString(mockModel))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.text").value("T".repeat(DataContants.TWEET_MAX)))
+                .andExpect(jsonPath("$.source").value("S".repeat(DataContants.TWEET_MAX)))
+                .andExpect(jsonPath("$.showSource").value(true))
+                .andExpect(jsonPath("$.invisible").value(false))
+                .andExpect(jsonPath("$.replies").exists())
+                .andExpect(jsonPath("$.replies[*]").isNotEmpty())
+                .andExpect(jsonPath("$.replies[0]").value("R".repeat(DataContants.TWEET_MAX)));
+    }
+
+    @Test
+    public void givenQuoteRequestModel_whenPostQuote_andValidateLength_thenStatus400() throws Exception {
+
+        List<String> mockReplies = Collections.singletonList("R".repeat(DataContants.TWEET_MAX + 1));
+
+        QuoteRequestModel mockModel = new QuoteRequestModel(
+                "T".repeat(DataContants.TWEET_MAX + 1), "S".repeat(DataContants.TWEET_MAX + 1), true, false, mockReplies, true);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post("/quote/")
+                .content(new ObjectMapper().writeValueAsString(mockModel))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void givenArrayQuoteRequestModel_whenPostArrayQuote_thenStatus200() throws Exception {
 
         QuoteRequestModel mockModel = new QuoteRequestModel(
-                "Mock text", "Mock source", true, false, Collections.singletonList(new ReplyDataModel("Mock Reply")), true);
+                "Mock text", "Mock source", true, false, Collections.singletonList("Mock Reply"), true);
 
         QuoteRequestModel mockModel2 = new QuoteRequestModel(
                 "Mock text 2", "Mock source 2", true, false, null, true);
@@ -101,12 +145,12 @@ public class QuoteControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$[*].id").isNotEmpty())
-                .andExpect(jsonPath("$[*].text").isNotEmpty())
-                .andExpect(jsonPath("$[*].source").isNotEmpty())
+                .andExpect(jsonPath("$[*].id").exists())
+                .andExpect(jsonPath("$[*].text").exists())
+                .andExpect(jsonPath("$[*].source").exists())
                 .andExpect(jsonPath("$[*].showSource").exists())
                 .andExpect(jsonPath("$[*].invisible").exists())
-                .andExpect(jsonPath("$[*].replies").exists());
+                .andExpect(jsonPath("$[*].replies").isNotEmpty());
     }
 
     @Test

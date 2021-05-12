@@ -3,7 +3,6 @@ package com.maybot.quotebot.controller;
 import com.maybot.quotebot.QuotebotApplication;
 import com.maybot.quotebot.model.AllQuoteRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
-import com.maybot.quotebot.model.data.ReplyDataModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class QueueControllerIntegrationTest {
     @Test
     public void whenPopQueue_thenStatus200() throws Exception {
 
-        List<ReplyDataModel> mockReplies = Collections.singletonList(new ReplyDataModel("Mock Reply 1"));
+        List<String> mockReplies = Collections.singletonList("Mock Reply");
 
         QuoteRequestModel mockModel1 = new QuoteRequestModel(
                 "Mock text 1", "Mock source 1", true, false, mockReplies, false);
@@ -107,7 +106,7 @@ public class QueueControllerIntegrationTest {
     @Test
     public void whenPopQueue_AndPriorityTrue_thenStatus200() throws Exception {
 
-        List<ReplyDataModel> mockReplies = Collections.singletonList(new ReplyDataModel("Mock Reply 2"));
+        List<String> mockReplies = Collections.singletonList("Mock Reply 2");
 
         QuoteRequestModel mockModel1 = new QuoteRequestModel(
                 "Mock text 1", "Mock source 1", true, false, new ArrayList<>(), false);

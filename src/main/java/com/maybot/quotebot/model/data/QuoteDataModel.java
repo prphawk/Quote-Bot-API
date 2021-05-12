@@ -2,23 +2,22 @@ package com.maybot.quotebot.model.data;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.entity.Quote;
+import org.hibernate.validator.constraints.Length;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class QuoteDataModel {
 
     private Long id;
 
-    @NotBlank(message = DataContants.QUOTE_TEXT_EMPTY_MESSAGE)
-    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_TEXT_MAX_MESSAGE)
+    @NotBlank(message = DataContants.TWEET_EMPTY_MESSAGE)
+    @Size(max = DataContants.TWEET_MAX, message = DataContants.TWEET_MAX_MESSAGE)
     private String text;
 
-    @Size(max = DataContants.QUOTE_TEXT_MAX, message = DataContants.QUOTE_SOURCE_MAX_MESSAGE)
+    @Size(max = DataContants.TWEET_MAX, message = DataContants.SOURCE_MAX_MESSAGE)
     private String source;
 
     private boolean showSource;
@@ -27,15 +26,14 @@ public class QuoteDataModel {
 
     private List<String> tags;
 
-    @Valid
-    private List<ReplyDataModel> replies;
+    private List<@Length(max = DataContants.TWEET_MAX) String> replies;
 
     public QuoteDataModel() {
         this.replies = new ArrayList<>();
         this.tags = new ArrayList<>();
     }
 
-    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<ReplyDataModel> replies) {
+    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<String> replies) {
         this.text = text;
         this.source = source;
         this.showSource = showSource;
@@ -48,7 +46,7 @@ public class QuoteDataModel {
         this.text = quote.getText();
         this.source = quote.getSource();
         this.showSource = quote.getShowSource();
-        this.replies = quote.getReplies().stream().map(ReplyDataModel::new).collect(Collectors.toList());
+        this.replies = quote.getReplies();
         this.invisible = quote.isInvisible();
         this.tags = quote.getTags();
     }
@@ -93,11 +91,11 @@ public class QuoteDataModel {
         this.source = source;
     }
 
-    public List<ReplyDataModel> getReplies() {
+    public List<String> getReplies() {
         return replies;
     }
 
-    public void setReplies(List<ReplyDataModel> replies) {
+    public void setReplies(List<String> replies) {
         this.replies = replies;
     }
 
