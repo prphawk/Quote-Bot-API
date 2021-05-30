@@ -16,12 +16,6 @@ public class ImageDataModel {
 
     public ImageDataModel() { }
 
-    public ImageDataModel(Long id, String allText, String fileName) {
-        this.id = id;
-        this.allText = allText;
-        this.fileName = fileName;
-    }
-
     public ImageDataModel(Image image) {
         this.allText = image.getAltText();
         this.fileName = image.getFileName();
