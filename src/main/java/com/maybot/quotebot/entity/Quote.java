@@ -30,9 +30,9 @@ public class Quote {
     @Column(name = "invisible")
     private boolean invisible;
 
-
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> images;
+    @ElementCollection
+    @CollectionTable(name = "images")
+    private List<String> images;
 
     @ElementCollection
     @Column(length=DataContants.TWEET_MAX)
@@ -59,7 +59,7 @@ public class Quote {
         this.invisible = model.isInvisible();
         this.tags = model.getTags();
         this.replies = model.getReplies();
-        this.images = new ArrayList<>();
+        this.images = model.getImages();
     }
 
     public List<String> getTags() {
@@ -122,11 +122,11 @@ public class Quote {
         this.invisible = invisible;
     }
 
-    public List<Image> getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 }

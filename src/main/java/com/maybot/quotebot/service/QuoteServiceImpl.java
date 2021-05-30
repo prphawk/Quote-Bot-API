@@ -19,12 +19,10 @@ public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final QueueServiceImpl queueService;
-    private final ImageServiceImpl imageService;
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ImageServiceImpl imageService) {
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService) {
         this.quoteRepository = quoteRepository;
         this.queueService = queueService;
-        this.imageService = imageService;
     }
 
     public ResponseEntity<List<QuoteDataModel>> getAllRequest() {
@@ -52,9 +50,7 @@ public class QuoteServiceImpl {
         quoteRepository.save(quote);
 
         QuoteDataModel response = new QuoteDataModel(quote);
-
-        response.setImages(imageService.saveAll(model.getImages(), quote));
-
+        
         if(!model.isInvisible())
             queueService.push(quote, model.isPriority());
 

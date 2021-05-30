@@ -5,7 +5,7 @@ import com.maybot.quotebot.entity.Quote;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class QuoteDataModel {
 
     private Long id;
 
-    @NotBlank(message = DataContants.TWEET_EMPTY_MESSAGE)
+    @NotNull(message = DataContants.TWEET_EMPTY_MESSAGE)
     @Size(max = DataContants.TWEET_MAX, message = DataContants.TWEET_MAX_MESSAGE)
     private String text;
 
@@ -30,8 +30,7 @@ public class QuoteDataModel {
 
     private List<@Length(max = DataContants.TWEET_MAX) String> replies;
 
-    @Valid
-    private List<ImageDataModel> images;
+    private List<String> images;
 
     public QuoteDataModel() {
         this.replies = new ArrayList<>();
@@ -39,7 +38,7 @@ public class QuoteDataModel {
         this.images = new ArrayList<>();
     }
 
-    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<String> replies, List<ImageDataModel> images) {
+    public QuoteDataModel(String text, String source, boolean showSource, boolean invisible, List<String> replies, List<String> images) {
         this.text = text;
         this.source = source;
         this.showSource = showSource;
@@ -57,7 +56,7 @@ public class QuoteDataModel {
         this.invisible = quote.isInvisible();
         this.tags = quote.getTags();
         this.replies = quote.getReplies();
-        this.images = quote.getImages().stream().map(ImageDataModel::new).collect(Collectors.toList());
+        this.images = quote.getImages();
     }
 
     public boolean getShowSource() {
@@ -116,11 +115,11 @@ public class QuoteDataModel {
         this.invisible = invisible;
     }
 
-    public List<ImageDataModel> getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageDataModel> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 }
