@@ -2,8 +2,10 @@ package com.maybot.quotebot.entity;
 
 import com.maybot.quotebot.constant.DataContants;
 import com.maybot.quotebot.model.data.QuoteDataModel;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +18,10 @@ public class Quote {
     @Column(name = "id", nullable = false)
     protected Long id;
 
-    @Column(name = "text", length = DataContants.QUOTE_TEXT_MAX, nullable = false)
+    @Column(name = "text", length = DataContants.TWEET_MAX, nullable = false)
     private String text;
 
-    @Column(name = "source", length = DataContants.QUOTE_TEXT_MAX)
+    @Column(name = "source", length = DataContants.TWEET_MAX)
     private String source;
 
     @Column(name = "showSource")
@@ -28,11 +30,14 @@ public class Quote {
     @Column(name = "invisible")
     private boolean invisible;
 
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Reply> replies;
 
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images;
+
+    @ElementCollection
+    @Column(length=DataContants.TWEET_MAX)
+    @CollectionTable(name = "replies")
+    private List<String> replies;
 
     @ElementCollection
     @CollectionTable(name = "tags")
@@ -53,7 +58,7 @@ public class Quote {
         this.showSource = model.getShowSource();
         this.invisible = model.isInvisible();
         this.tags = model.getTags();
-        this.replies = new ArrayList<>();
+        this.replies = model.getReplies();
         this.images = new ArrayList<>();
     }
 
@@ -89,11 +94,11 @@ public class Quote {
         this.source = source;
     }
 
-    public List<Reply> getReplies() {
+    public List<String> getReplies() {
         return replies;
     }
 
-    public void setReplies(List<Reply> replies) {
+    public void setReplies(List<String> replies) {
         this.replies = replies;
     }
 

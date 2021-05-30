@@ -21,13 +21,16 @@ public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final QueueServiceImpl queueService;
+<<<<<<<
     private final ReplyServiceImpl replyService;
     private final ImageServiceImpl imageService;
+=======
 
-    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ReplyServiceImpl replyServiceImpl, ImageServiceImpl imageService) {
+>>>>>>>
+
+    public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ImageServiceImpl imageService) {
         this.quoteRepository = quoteRepository;
         this.queueService = queueService;
-        this.replyService = replyServiceImpl;
         this.imageService = imageService;
     }
 
@@ -57,8 +60,6 @@ public class QuoteServiceImpl {
 
         QuoteDataModel response = new QuoteDataModel(quote);
 
-        response.setReplies(replyService.saveReplies(model.getReplies(), quote));
-
         response.setImages(imageService.saveAll(model.getImages(), quote));
 
         if(!model.isInvisible())
@@ -76,8 +77,6 @@ public class QuoteServiceImpl {
             Quote quote = quoteSearch.get();
 
             QuoteDataModel response = saveChanges(model, quote);
-
-            response.setReplies(replyService.editReplies(model.getReplies(), quote));
 
             return response;
         }
@@ -127,6 +126,8 @@ public class QuoteServiceImpl {
         quote.setSource(model.getSource());
 
         quote.setShowSource(model.getShowSource());
+
+        quote.setReplies(model.getReplies());
 
         quote.setTags(model.getTags());
 
