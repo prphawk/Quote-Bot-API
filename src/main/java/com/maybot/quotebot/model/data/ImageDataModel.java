@@ -17,6 +17,7 @@ public class ImageDataModel {
     public ImageDataModel() { }
 
     public ImageDataModel(Image image) {
+        this.id = image.getId();
         this.allText = image.getAltText();
         this.fileName = image.getFileName();
     }

@@ -19,12 +19,7 @@ public class QuoteServiceImpl {
 
     private final QuoteRepository quoteRepository;
     private final QueueServiceImpl queueService;
-<<<<<<<
-    private final ReplyServiceImpl replyService;
     private final ImageServiceImpl imageService;
-=======
-
->>>>>>>
 
     public QuoteServiceImpl(QuoteRepository quoteRepository, QueueServiceImpl queueService, ImageServiceImpl imageService) {
         this.quoteRepository = quoteRepository;

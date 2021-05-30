@@ -7,7 +7,6 @@ import com.maybot.quotebot.model.AllQuoteRequestModel;
 import com.maybot.quotebot.model.PriorityRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
-import com.maybot.quotebot.model.data.ReplyDataModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +100,9 @@ public class QuoteControllerIntegrationTest {
         List<String> mockReplies = Collections.singletonList("R".repeat(DataContants.TWEET_MAX));
 
         QuoteRequestModel mockModel = new QuoteRequestModel(
-                "T".repeat(DataContants.TWEET_MAX), "S".repeat(DataContants.TWEET_MAX), true, false, mockReplies, true);
+                "T".repeat(DataContants.TWEET_MAX),
+                "S".repeat(DataContants.TWEET_MAX),
+                true, false, mockReplies, new ArrayList<>(), true);
 
         mvc.perform(MockMvcRequestBuilders
                 .post("/quote/")
@@ -127,7 +128,7 @@ public class QuoteControllerIntegrationTest {
         List<String> mockReplies = Collections.singletonList("R".repeat(DataContants.TWEET_MAX + 1));
 
         QuoteRequestModel mockModel = new QuoteRequestModel(
-                "T".repeat(DataContants.TWEET_MAX + 1), "S".repeat(DataContants.TWEET_MAX + 1), true, false, mockReplies, true);
+                "T".repeat(DataContants.TWEET_MAX + 1), "S".repeat(DataContants.TWEET_MAX + 1), true, false, mockReplies,new ArrayList<>(), true);
 
         mvc.perform(MockMvcRequestBuilders
                 .post("/quote/")
@@ -142,7 +143,7 @@ public class QuoteControllerIntegrationTest {
     public void givenArrayQuoteRequestModel_whenPostArrayQuote_thenStatus200() throws Exception {
 
         QuoteRequestModel mockModel = new QuoteRequestModel(
-                "Mock text", "Mock source", true, false, Collections.singletonList(new ReplyDataModel("Mock Reply")), new ArrayList<>(),true);
+                "Mock text", "Mock source", true, false, Collections.singletonList("Mock Reply"), new ArrayList<>(),true);
 
         QuoteRequestModel mockModel2 = new QuoteRequestModel(
                 "Mock text 2", "Mock source 2", true, false, null,new ArrayList<>(), true);
@@ -223,7 +224,7 @@ public class QuoteControllerIntegrationTest {
     @Test
     public void whenPopQueue_thenStatus200() throws Exception {
 
-        List<ReplyDataModel> mockReplies = Collections.singletonList(new ReplyDataModel("Mock Reply 1"));
+        List<String> mockReplies = Collections.singletonList("Mock Reply 1");
 
         List<QuoteRequestModel> models = makeItems();
 

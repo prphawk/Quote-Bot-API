@@ -9,6 +9,10 @@ import javax.persistence.*;
 public class Image {
 
     @Id
+    @GeneratedValue
+    @Column(name = "id", nullable = false)
+    protected Long id;
+
     @Column(name = "fileName", nullable = false)
     private String fileName;
 
@@ -24,6 +28,8 @@ public class Image {
         this.fileName = fileName;
         this.quote = quote;
     }
+
+    public Image() {}
 
     public Image(ImageDataModel model, Quote quote) {
         this.altText = model.getAllText();
@@ -53,5 +59,13 @@ public class Image {
 
     public void setQuote(Quote quote) {
         this.quote = quote;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
