@@ -1,6 +1,7 @@
 package com.maybot.quotebot.service;
 
 import com.maybot.quotebot.entity.Queue;
+import com.maybot.quotebot.entity.Quote;
 import com.maybot.quotebot.model.PriorityRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
 import com.maybot.quotebot.model.data.QueueDataModel;
@@ -153,7 +154,9 @@ public class QueueServiceImpl {
                 queue -> queueRepository.deleteById(queue.getId()));
     }
 
-    public Queue save(Queue queue) { return queueRepository.save(queue); }
+    public Queue push(Quote quote, boolean isPriority) {
+        return queueRepository.save(new Queue(quote, isPriority));
+    }
 
     public ResponseEntity<List<QueueDataModel>> restoreQueue(List<QuoteRequestModel> postedModels) {
 

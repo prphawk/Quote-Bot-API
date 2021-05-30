@@ -18,8 +18,7 @@ public class Schedule {
     @Column(name = "lastPosted")
     private LocalDateTime lastPosted;
 
-    public Schedule() {
-    }
+    public Schedule() {}
 
     public Schedule(Byte hour) {
         this.hour = hour;

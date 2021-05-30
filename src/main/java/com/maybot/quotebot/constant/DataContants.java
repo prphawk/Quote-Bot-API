@@ -8,5 +8,5 @@ public class DataContants {
     
     public final static String TWEET_EMPTY_MESSAGE = "texto não pode ser vazio";
 
-    public final static String SOURCE_MAX_MESSAGE = "fonte acima do limite de caracteres";
+    public final static String IMAGE_FILE_NAME_NULL_MESSAGE = "fileName de imagem não pode ser nulo";
 }
