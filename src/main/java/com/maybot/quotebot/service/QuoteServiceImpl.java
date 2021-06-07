@@ -129,7 +129,7 @@ public class QuoteServiceImpl {
         return new QuoteDataModel(quoteRepository.save(quote));
     }
 
-    public ResponseEntity<String> getSourceRequest(SourceRequestModel model) {
+    public ResponseEntity<String> getSourceRequest(SearchRequestModel model) {
 
         Optional<Quote> quoteSearch = quoteRepository.findFirstByTextStartsWith(model.getText());
 
@@ -142,9 +142,22 @@ public class QuoteServiceImpl {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> findByTagRequest(String tag) {
+    public ResponseEntity<?> findByTagRequest(SearchRequestModel model) {
 
-        List<Quote> quoteSearch = quoteRepository.findByTag(tag);
+        List<Quote> quoteSearch = quoteRepository.findByTag(model.getText());
+
+        if(quoteSearch.size() > 0) {
+            List<QuoteDataModel> response = quoteSearch.stream().map(QuoteDataModel::new).collect(Collectors.toList());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findRequest(SearchRequestModel model) {
+
+        List<Quote> quoteSearch = quoteRepository.find(model.getText());
 
         if(quoteSearch.size() > 0) {
             List<QuoteDataModel> response = quoteSearch.stream().map(QuoteDataModel::new).collect(Collectors.toList());

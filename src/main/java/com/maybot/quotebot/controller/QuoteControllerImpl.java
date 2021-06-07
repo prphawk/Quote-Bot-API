@@ -2,7 +2,7 @@ package com.maybot.quotebot.controller;
 
 import com.maybot.quotebot.model.AllQuoteRequestModel;
 import com.maybot.quotebot.model.QuoteRequestModel;
-import com.maybot.quotebot.model.SourceRequestModel;
+import com.maybot.quotebot.model.SearchRequestModel;
 import com.maybot.quotebot.model.data.QuoteDataModel;
 import com.maybot.quotebot.service.QuoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +34,18 @@ public class QuoteControllerImpl {
     }
 
     @GetMapping("source")
-    public ResponseEntity<String> getSourceRequest(@Valid @RequestBody SourceRequestModel model) {
+    public ResponseEntity<String> getSourceRequest(@Valid @RequestBody SearchRequestModel model) {
         return quoteServiceImpl.getSourceRequest(model);
     }
 
     @GetMapping("tag")
-    public ResponseEntity<?> findByTagRequest(@Valid @RequestBody String tag) {
-        return quoteServiceImpl.findByTagRequest(tag);
+    public ResponseEntity<?> findByTagRequest(@Valid @RequestBody SearchRequestModel model) {
+        return quoteServiceImpl.findByTagRequest(model);
+    }
+
+    @GetMapping("find")
+    public ResponseEntity<?> findRequest(@Valid @RequestBody SearchRequestModel model) {
+        return quoteServiceImpl.findRequest(model);
     }
 
     @PostMapping

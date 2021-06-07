@@ -2,12 +2,12 @@ package com.maybot.quotebot.model;
 
 import javax.validation.constraints.NotBlank;
 
-public class SourceRequestModel {
+public class SearchRequestModel {
 
     @NotBlank
     private String text;
 
-    public SourceRequestModel() {}
+    public SearchRequestModel() {}
 
     public String getText() {
         return text;
